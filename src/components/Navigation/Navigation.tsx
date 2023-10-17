@@ -15,8 +15,9 @@ import { useNavigate } from 'react-router-dom';
 import LoginIcon from '@mui/icons-material/Login';
 import SchoolIcon from '@mui/icons-material/School';
 import MenuIcon from '@mui/icons-material/Menu';
+import React from 'react';
 
-const pages = [{title: 'Новости', path: '/news'}];
+const pages = [{title: 'Новости', path: '/news'}, {title: 'Преподаватели и сотрудники', path: '/professors'}];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const isLogin = false
 
@@ -125,7 +126,7 @@ function Navigation() {
               <Button
                 key={page.title}
                 onClick={() => handleCloseNavMenu(page.path)}
-                sx={{ my: 2, color: 'black', display: 'block' }}
+                sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page.title}
               </Button>

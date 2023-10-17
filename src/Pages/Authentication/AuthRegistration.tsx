@@ -1,9 +1,9 @@
-import { Box, Button, Divider, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography, useMediaQuery } from '@mui/material';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
 import { getAuthErrors, isAuthenticated } from '../../store/userReducer';
+import { Box, Button, Divider, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography, useMediaQuery } from '@mui/material';
 
 interface FormParams {
 	login?: string;
