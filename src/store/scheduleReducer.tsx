@@ -2,38 +2,42 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import axios from "axios";
 import { Dispatch } from "redux";
 import { RootState } from "./store";
-import { mockNews } from "../mock/news";
+import { mockSchedule } from "../mock/schedule";
+import { IStudent, ISubject } from "../Pages/Calendar/Calendar";
 
-export interface INews {
-  header: string;
-  date: string;
-  text: string;
-  hashtags: string[];
-  id?: number;
-  imgs?: string[];
+export interface ISchedule {
+  id: number
+  date: string
+  studyGroup: {id: number, name: string, students: IStudent[]}
+  subject: { name: string }
+  classFormat: string
+  auditorium: string
+  linkForTheClass: string
+  professorId: number
+  professor: string
 }
 
-interface newsState {
-  entities: INews[] | null;
+interface scheduleState {
+  entities: ISchedule[] | null;
   error: string | null;
   loading: boolean;
 }
 
-const initialState: newsState = {
+const initialState: scheduleState = {
   entities: null,
   error: null,
   loading: false
 };
 
-const newsSlice = createSlice({
-  name: "news",
+const scheduleSlice = createSlice({
+  name: "schedule",
   initialState,
   reducers: {
     fetchDataStart: (state) => {
       state.loading = true;
       state.error = null;
     },
-    fetchDataSuccess: (state, action: PayloadAction<INews[]>) => {
+    fetchDataSuccess: (state, action: PayloadAction<ISchedule[]>) => {
       state.entities = action.payload;
       state.error = null;
     },
@@ -48,15 +52,15 @@ export const {
   fetchDataStart,
   fetchDataSuccess,
   fetchDataFailure,
-} = newsSlice.actions;
-export default newsSlice.reducer;
+} = scheduleSlice.actions;
+export default scheduleSlice.reducer;
 
-export const fetchNews = () => {
+export const getFullSchedule = () => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch(fetchDataStart());
       // const response = await axios.get('https://dummyjson.com/posts');
-      dispatch(fetchDataSuccess(mockNews));
+      dispatch(fetchDataSuccess(mockSchedule));
       // dispatch(fetchDataSuccess(response.data.posts));
     } catch (error) {
       dispatch(fetchDataFailure("Что-то пошло не так"));

@@ -11,18 +11,25 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import LoginIcon from '@mui/icons-material/Login';
+import PersonIcon from '@mui/icons-material/Person';import LoginIcon from '@mui/icons-material/Login';
 import SchoolIcon from '@mui/icons-material/School';
 import MenuIcon from '@mui/icons-material/Menu';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { getCurrentUserData, logOut } from '../../store/userReducer';
+import localStorageService from '../../services/localStorage.service';
+import { useAppDispatch } from '../../store/store';
 
-const pages = [{title: 'Новости', path: '/news'}, {title: 'Преподаватели и сотрудники', path: '/professors'}];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-const isLogin = false
+const pages = [{title: 'Новости', path: '/news'}, {title: 'Преподаватели и сотрудники', path: '/professors'}, {title: 'Расписание', path: '/calendar'}];
+const settings = [{title: 'Профиль', action: 'profile'}, {title: 'Выйти', action: 'logout'}]
+// const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navigation() {
   const navigate = useNavigate()
+  const currentUser = useSelector(getCurrentUserData());
+  const userId = localStorageService.getUserId()
+  const dispatch = useAppDispatch()
+
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -38,9 +45,16 @@ function Navigation() {
     navigate(path)
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (action: string) => {
+    if (action === 'logout') {
+      dispatch(logOut())
+    } else if (action === 'profile') {
+      navigate('/profile')
+    }
     setAnchorElUser(null);
   };
+
+  console.log("currentUser", currentUser)
 
   return (
     <AppBar position="sticky">
@@ -133,12 +147,25 @@ function Navigation() {
             ))}
           </Box>
 
-          {isLogin ? <Box sx={{ flexGrow: 0 }}>
+          {userId ? <Box sx={{ flexGrow: 0 }}>
+
+            <Box display="flex" alignItems="center">
+            <Typography mx={1}>{currentUser?.name} {currentUser?.surname}</Typography>
+
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              {currentUser?.photo ?
+                <Avatar alt="Remy Sharp" src={currentUser?.photo} />
+                :
+                <Avatar sx={{ bgcolor: '#ba68c8' }}>
+                  <PersonIcon />
+                </Avatar>
+              }
+
               </IconButton>
             </Tooltip>
+            </Box>
+
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -156,8 +183,8 @@ function Navigation() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem onClick={() => handleCloseUserMenu(setting.action)}>
+                  <Typography textAlign="center">{setting.title}</Typography>
                 </MenuItem>
               ))}
             </Menu>

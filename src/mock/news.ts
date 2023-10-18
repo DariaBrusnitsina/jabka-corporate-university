@@ -1,4 +1,4 @@
-export const news = [
+export const mockNews = [
   {
     header: "Открытие новой учебной программы",
     date: "2023-10-16",

@@ -18,7 +18,7 @@ function Main() {
       </Stack>
 
     <Box>
-      <Box display='flex'>
+      <Box display='flex' columnGap={4}>
         {selectedNews && selectedNews.map((post) => (
       <NewsCard key={post.id} post={post} />
         ))}

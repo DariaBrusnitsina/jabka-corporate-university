@@ -1,7 +1,7 @@
-import { Box, Button, Chip, FormControl, FormHelperText, InputLabel, Modal, OutlinedInput, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Chip, FormControl, FormHelperText, InputLabel, Modal, OutlinedInput, TextField, Typography, styled, useMediaQuery } from "@mui/material";
 import { useAppDispatch } from "../../store/store";
-import { INews } from "../../store/newsReducer";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useState } from "react";
+import Textarea from '@mui/joy/Textarea';
 
 interface FormParams {
   header?: string;
@@ -23,16 +23,32 @@ const style = {
 
 interface Props {
   open: boolean;
-  post: INews;
+  post?: IPartialNews;
   handleClose: () => void;
+  isEdit: boolean;
 }
 
-export default function EditNewsModal({open, post, handleClose}: Props) {
+interface IPartialNews {
+  date?: string;
+  id?: number;
+  imgs?: string[];
+  header: string,
+  text: string,
+  hashtags: string[]
+}
+
+const initialState: IPartialNews = {
+  header: "",
+  // date: string;
+  text: "",
+  hashtags: []
+}
+
+export default function EditNewsModal({open, post, handleClose, isEdit}: Props) {
   const xs = useMediaQuery('(max-width:550px)');
 	const sm = useMediaQuery('(max-width:750px)');
   const dispatch = useAppDispatch()
-
-  const [formValues, setFormValues] = useState(post)
+  const [formValues, setFormValues] = useState<IPartialNews>(post ? post : initialState)
   const [formErrors, setFormErrors] = useState<FormParams>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -43,16 +59,17 @@ export default function EditNewsModal({open, post, handleClose}: Props) {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    setFormValues((prev) => {return { ...prev, [name]: value }});
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormErrors(validate(formValues));
     setIsSubmitting(true);
+    console.log(formValues.hashtags)
   };
 
-  const validate = (values: INews) => {
+  const validate = (values: IPartialNews) => {
     const errors: FormParams = {};
 
     if (!values.header) {
@@ -66,12 +83,10 @@ export default function EditNewsModal({open, post, handleClose}: Props) {
     return errors
   };
 
-  const handleDelete = () => {
-    console.info('You clicked the delete icon.');
-  };
-
   useEffect(() => {
-    setFormValues(post)
+    if (post) {
+      setFormValues(post)
+    }
   }, [open]);
 
   useEffect(() => {
@@ -79,6 +94,25 @@ export default function EditNewsModal({open, post, handleClose}: Props) {
       submit();
     }
   }, [formErrors, isSubmitting]);
+
+  function handleKeyDown(e: KeyboardEvent<HTMLInputElement>){
+      if(e.key !== 'Enter') return
+      let tags = formValues.hashtags
+      const value = (e.target as HTMLInputElement).value;
+
+      if(!value.trim()) return
+    (e.target as HTMLInputElement).value = '';
+      setFormValues((prev) => {
+        return { ...prev, hashtags: [...tags, value] };
+      });
+  }
+
+  function removeTag(index: number){
+    const filteredTags = formValues.hashtags.filter((el, i) => i !== index)
+    setFormValues((prev) => {
+      return { ...prev, hashtags: filteredTags };
+    });
+  }
 
   return (
     <div>
@@ -89,7 +123,7 @@ export default function EditNewsModal({open, post, handleClose}: Props) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-        <Typography variant="h4" textAlign='center' mb={3}>Редактирование поста</Typography>
+        <Typography variant="h4" textAlign='center' mb={3}>{isEdit ? 'Редактирование поста' : 'Создание поста'}</Typography>
 
         <Box
         component="form"
@@ -111,23 +145,35 @@ export default function EditNewsModal({open, post, handleClose}: Props) {
             id="header"
             name='header'
             label="Заголовок" />
-          <FormHelperText id="password">{formErrors.header ? formErrors.header : ''}</FormHelperText>
+          <FormHelperText id="header">{formErrors.header ? formErrors.header : ''}</FormHelperText>
         </FormControl>
 
-        <Typography>Теги</Typography>
-        {}
+        <Box my={3}>
+          <Typography variant="h5">Теги</Typography>
+            {formValues.hashtags.map((tag, index) => (
+              <Chip
+              sx={{margin: '0 10px 10px 0'}}
+              key={index}
+              label={tag}
+              onDelete={() => removeTag(index)}
+              />
+            )) }
 
-        <Chip label="Deletable" onDelete={handleDelete} />
-
-        <Box>
-        <textarea name="" id="">{post.text}</textarea>
-
+            <Box>
+            <TextField onKeyDown={handleKeyDown} id="standard-basic" label="Добавить тег" variant="standard" />
+            </Box>
         </Box>
 
+        <Box width={'100%'}>
+          <Typography variant="h5">Текст новости</Typography>
 
-
-
-
+          <Textarea
+            minRows={2}
+            size="sm"
+            defaultValue={formValues.text}
+            variant="soft"
+          />
+        </Box>
 
         {/* {isSubmitting && Object.keys(formErrors).length === 0 && <Typography sx={{ display: 'block', marginTop: '20px', textAlign: 'center' }} color='#FF3C02'>{authError ? authError : ""}</Typography>} */}
 

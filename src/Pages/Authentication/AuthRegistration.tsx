@@ -2,8 +2,9 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
-import { getAuthErrors, isAuthenticated } from '../../store/userReducer';
+import { getAuthErrors, isAuthenticated, register } from '../../store/userReducer';
 import { Box, Button, Divider, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography, useMediaQuery } from '@mui/material';
+import { useAppDispatch } from '../../store/store';
 
 interface FormParams {
 	login?: string;
@@ -16,6 +17,7 @@ interface FormParams {
 }
 
 function AuthRegistration() {
+	const dispatch = useAppDispatch()
 	const [showPassword, setShowPassword] = useState(false);
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -32,21 +34,16 @@ function AuthRegistration() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const submit = () => {
-		const data: FormParams = {
-			login: formValues.login,
-			name: formValues.name,
-			surname: formValues.surname,
-			email: formValues.email,
-			password: formValues.password,
-		}
 
 		if (formValues.patronymic !== "") {
-			data.patronymic = formValues.patronymic
+			dispatch(register(formValues.login, formValues.password,formValues.email,formValues.name,formValues.surname,
+				 formValues.patronymic
+			))
+		} else {
+			dispatch(register(formValues.login, formValues.password,formValues.email,formValues.name,formValues.surname
+		 ))
 		}
 
-		console.log(data)
-
-	// 	// dispatch(register(formValues.email, formValues.username, formValues.password)); // Отправляем данные для регистрации
 	};
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

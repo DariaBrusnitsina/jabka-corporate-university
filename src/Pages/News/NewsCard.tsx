@@ -16,7 +16,7 @@ function NewsCard({ post }: Props) {
 
   return (
       <Card sx={{marginY: '20px'}}>
-        <Box m={3} >
+        <Box m={3} height="80%" display="flex" flexDirection="column" justifyContent="space-between">
           <Link
             color='primary'
             variant="h6"

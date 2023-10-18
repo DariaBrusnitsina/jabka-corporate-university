@@ -2,18 +2,18 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Dispatch } from "redux";
 import { RootState } from "./store";
+import localStorageService from "../services/localStorage.service";
 
 export interface IAuth {
   id: number;
   email: string;
   username: string;
-  firstName: string;
-  lastName: string;
-  gender: string;
-  image: string;
-  token: string;
+  name: string;
+  login: string;
+  surname: string;
+  patronymic?: string;
+  photo?: string;
 }
-
 interface authState {
   entities: IAuth | null;
   isAuthenticated: boolean;
@@ -59,7 +59,7 @@ export const login = (
 ) => {
   return async (dispatch: Dispatch) => {
     try {
-      const response = await axios.post('https://dummyjson.com/auth/login', {
+      const response = await axios.post('http://158.160.49.7:8080/api/user/auth/signin', {
         login: login,
         password: password,
       }, {
@@ -68,8 +68,63 @@ export const login = (
         }
       })
 
-      dispatch(fetchDataSuccess(response.data));
+      dispatch(fetchDataSuccess(response.data.user));
+      localStorageService.setTokens({ idToken: response.data.accessToken, localId:response.data.user.id});
+      console.log(response.data)
 
+    } catch (error) {
+      dispatch(fetchDataFailure("Неверный логин или пароль"));
+    }
+  };
+};
+
+export const logOut = () => (dispatch: Dispatch) => {
+  localStorageService.removeAuthData();
+  dispatch(logout());
+};
+
+export const register = (
+  login: string,
+  password: string,
+  email: string,
+  name: string,
+  surname: string,
+  patronymic?: string
+) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      const data = patronymic ? {
+         login,
+         password,
+         email,
+         name,
+         surname,
+         patronymic
+      } :
+      {
+         login,
+         password,
+         email,
+         name,
+         surname,
+      }
+       await axios.post('http://158.160.49.7:8080/api/user/auth/signup', {...data}, {
+        headers: {
+          'Content-Type': 'application/json',
+        }})
+
+    } catch (error) {
+      dispatch(fetchDataFailure("Неверный логин или пароль"));
+    }
+  };
+};
+
+export const getCurrentUserWithToken = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      const token = localStorageService.getAccessToken()
+      const response = await axios.get(`http://158.160.49.7:8080/api/user/${id}`, {headers: {'Authorization': `Bearer ${token}`}})
+      dispatch(fetchDataSuccess(response.data));
     } catch (error) {
       dispatch(fetchDataFailure("Неверный логин или пароль"));
     }
@@ -78,4 +133,5 @@ export const login = (
 
 export const isAuthenticated = () => (state: RootState) => state.auth.isAuthenticated;
 export const getAuthErrors = () => (state: RootState) => state.auth.error;
+export const getCurrentUserData = () => (state: RootState) => state.auth.entities;
 export const getCurrentUserId = () => (state: RootState) => state.auth.entities?.id;

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from "react-redux"
 import { INews, getAllNews } from "../../store/newsReducer"
 import { Box, Button, Container, Divider, MenuItem, Pagination, Stack, TextField, Typography } from "@mui/material"
@@ -6,10 +5,9 @@ import NewsCard from "./NewsCard"
 import AddIcon from '@mui/icons-material/Add';
 import { ChangeEvent, useState } from "react";
 import SearchIcon from '@mui/icons-material/Search';
-import _ from 'lodash'
+import EditNewsModal from '../NewsPost/EditNewsModal';
 
-
-const allHashtags = ['Все новости', 'Поступающим', 'Образование', 'Наука', 'Экспертиза', 'Общество', 'Университетская жизнь']
+const allHashtags = ['Всe новости', 'Поступающим', 'Образование', 'Наука', 'Экспертиза', 'Общество', 'Университетская жизнь']
 const options=[
   { value: 'latest', label: 'Сначала новые' },
   { value: 'oldest', label: 'Сначала старые' },
@@ -20,12 +18,16 @@ export function paginate(items: INews[], pageNumber: number, pageSize: number) {
   return [...items].splice(startIndex, pageSize);
 }
 
-
 function News() {
   const news = useSelector(getAllNews())
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const newsPerPage = 5;
+
+  //modal
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   if (!news) {
     return <p>Loading</p>
@@ -50,12 +52,7 @@ function News() {
   }
   const filteredNews = filterNews(news);
   const count = filteredNews.length;
-
-  const sortedNews = _.orderBy(
-    filteredNews,
-    // [sortBy.path],
-    // [sortBy.order]
-  );
+  const sortedNews = filteredNews
   const newsCrop = paginate(sortedNews, page, newsPerPage);
 
   return(
@@ -63,7 +60,7 @@ function News() {
       <Stack direction="row" alignItems="center" justifyContent="space-between" my={5}>
         <Typography variant="h4">Новости нашего университета</Typography>
 
-        <Button variant="contained" color="secondary" startIcon={<AddIcon />}>
+        <Button variant="contained" color="secondary" startIcon={<AddIcon />} onClick={handleOpen}>
           Добавить новость
         </Button>
       </Stack>
@@ -101,6 +98,8 @@ function News() {
 
       </Box>
     </Box>
+    <EditNewsModal open={open}  handleClose={handleClose} isEdit={false}/>
+
  </Container>
   )
 

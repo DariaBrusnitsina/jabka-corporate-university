@@ -8,7 +8,6 @@ import EditNewsModal from "./EditNewsModal";
 
 const postBody = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ea qui similique ullam fugiat beatae quisquam quia eum libero porro deleniti, mollitia facilis, quibusdam, culpa incidunt nobis! Fuga, ab ut!"
 
-
 export default function NewsPost() {
   const location = useLocation()
   const postId = Number(location.pathname.split("/")[2])
@@ -54,7 +53,7 @@ export default function NewsPost() {
         </Box>
       </Box>
 
-      <EditNewsModal post={post} open={open}  handleClose={handleClose}/>
+      <EditNewsModal post={post} open={open}  handleClose={handleClose} isEdit={true}/>
     </ Container>
   )
 }
