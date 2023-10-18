@@ -13,6 +13,8 @@ export interface IAuth {
   surname: string;
   patronymic?: string;
   photo?: string;
+  activationStatus?: null | string;
+  grop: string
 }
 interface authState {
   entities: IAuth | null;

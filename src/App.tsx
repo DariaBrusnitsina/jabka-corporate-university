@@ -12,6 +12,7 @@ import localStorageService from './services/localStorage.service'
 import {  getCurrentUserWithToken, isAuthenticated } from './store/userReducer'
 import { useSelector } from 'react-redux'
 import Profile from './Pages/Profile/Profile'
+import Application from './Pages/Application/Application'
 
 export default function App() {
   const dispatch = useAppDispatch()
@@ -41,6 +42,8 @@ export default function App() {
       <Route path='/auth' element={<AuthLayout/>}/>
       <Route path='/calendar' element={<Calendar/>}/>
       <Route path='/profile' element={<Profile/>}/>
+      <Route path='/application' element={<Application />}/>
+
 
 
       <Route path="news">

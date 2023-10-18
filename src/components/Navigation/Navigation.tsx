@@ -20,7 +20,7 @@ import { getCurrentUserData, logOut } from '../../store/userReducer';
 import localStorageService from '../../services/localStorage.service';
 import { useAppDispatch } from '../../store/store';
 
-const pages = [{title: 'Новости', path: '/news'}, {title: 'Преподаватели и сотрудники', path: '/professors'}, {title: 'Расписание', path: '/calendar'}];
+const pages = [{title: 'Новости', path: '/news'}, {title: 'Преподаватели и сотрудники', path: '/professors'}, {title: 'Расписание', path: '/calendar'}, {title: 'Заявления', path: 'application'}];
 const settings = [{title: 'Профиль', action: 'profile'}, {title: 'Выйти', action: 'logout'}]
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
