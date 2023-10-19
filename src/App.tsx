@@ -7,12 +7,12 @@ import { useEffect, useState } from 'react'
 import { useAppDispatch } from './store/store'
 import { fetchNews } from './store/newsReducer'
 import NewsPost from './Pages/NewsPost/NewsPost'
-import Calendar from './Pages/Calendar/Calendar'
 import localStorageService from './services/localStorage.service'
 import {  getCurrentUserWithToken, isAuthenticated } from './store/userReducer'
 import { useSelector } from 'react-redux'
 import Profile from './Pages/Profile/Profile'
 import Application from './Pages/Application/Application'
+import Schedule from './Pages/Schedule /Schedule'
 
 export default function App() {
   const dispatch = useAppDispatch()
@@ -40,7 +40,7 @@ export default function App() {
     <Routes>
       <Route path='/' element={<Main/>}/>
       <Route path='/auth' element={<AuthLayout/>}/>
-      <Route path='/calendar' element={<Calendar/>}/>
+      <Route path='/calendar' element={<Schedule />}/>
       <Route path='/profile' element={<Profile/>}/>
       <Route path='/application' element={<Application />}/>
 

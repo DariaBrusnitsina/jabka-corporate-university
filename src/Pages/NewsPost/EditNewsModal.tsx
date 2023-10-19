@@ -39,7 +39,6 @@ interface IPartialNews {
 
 const initialState: IPartialNews = {
   header: "",
-  // date: string;
   text: "",
   hashtags: []
 }

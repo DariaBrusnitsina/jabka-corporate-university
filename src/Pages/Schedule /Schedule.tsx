@@ -1,7 +1,6 @@
 import { Box, Container, Stack, Typography } from "@mui/material";
 import { ISchedule } from "../../store/scheduleReducer";
 
-
 export interface ISubject{
   name: string
   studyGroup: {id: number, name: string}[]
@@ -43,8 +42,7 @@ export interface IStudent {
   activationStatus: string
 }
 
-export default function Calendar() {
-
+export default function Schedule () {
 
   return (
     <Container>
@@ -57,10 +55,7 @@ export default function Calendar() {
       <Typography>Выбрать расписание</Typography>
     </Box>
 
-    <Box>
-    <Typography>Выберете</Typography>
 
-    </Box>
 
     </Container>
   )

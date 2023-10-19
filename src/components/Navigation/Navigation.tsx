@@ -54,8 +54,6 @@ function Navigation() {
     setAnchorElUser(null);
   };
 
-  console.log("currentUser", currentUser)
-
   return (
     <AppBar position="sticky">
       <Container maxWidth="xl">
@@ -183,7 +181,7 @@ function Navigation() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem onClick={() => handleCloseUserMenu(setting.action)}>
+                <MenuItem key={setting.title} onClick={() => handleCloseUserMenu(setting.action)}>
                   <Typography textAlign="center">{setting.title}</Typography>
                 </MenuItem>
               ))}

@@ -2,11 +2,13 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import authReducer from './userReducer';
 import newsReducer from './newsReducer';
+import applicationReducer from './applicationReducer';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    news: newsReducer
+    news: newsReducer,
+    application: applicationReducer
   },
 });
 

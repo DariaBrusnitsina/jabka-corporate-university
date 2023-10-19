@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "redux";
 import { RootState } from "./store";
 import { mockNews } from "../mock/news";
+import axios from "axios";
 
 export interface INews {
   header: string;
@@ -55,9 +56,9 @@ export const fetchNews = () => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch(fetchDataStart());
-      // const response = await axios.get('https://dummyjson.com/posts');
-      dispatch(fetchDataSuccess(mockNews));
-      // dispatch(fetchDataSuccess(response.data.posts));
+      const response = await axios.get('http://158.160.49.7:8080/api/news');
+      // dispatch(fetchDataSuccess(mockNews));
+      dispatch(fetchDataSuccess(response.data));
     } catch (error) {
       dispatch(fetchDataFailure("Что-то пошло не так"));
     }

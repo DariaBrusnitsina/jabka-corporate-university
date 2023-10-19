@@ -3,7 +3,6 @@ import { useAppDispatch } from "../../store/store";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Textarea from '@mui/joy/Textarea';
 import { IAuth } from "../../store/userReducer";
-import { createApplication } from "../../store/applicationReducer";
 
 interface FormParams {
   leaderName?: string;
@@ -21,6 +20,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   bgcolor: 'background.paper',
   boxShadow: 24,
+  overflow: 'scroll',
   p: 4,
 };
 
@@ -44,7 +44,7 @@ interface Props {
 }
 
 
-export default function CreateApplicationModal({open, user, handleClose}: Props) {
+export default function EditApplicationModal({open, application, user, handleClose}: Props) {
   const xs = useMediaQuery('(max-width:550px)');
 	const sm = useMediaQuery('(max-width:750px)');
   const dispatch = useAppDispatch()
@@ -64,13 +64,21 @@ export default function CreateApplicationModal({open, user, handleClose}: Props)
   }
 
   const [formValues, setFormValues] = useState<IApplication>(initialState)
+
+  useEffect(() => {
+    if (application) {
+      setFormValues(application)
+    }
+  }, [open]);
+
+
   const [formErrors, setFormErrors] = useState<FormParams>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
 
   const submit = () => {
     console.log('formValues', formValues)
-		dispatch(createApplication(formValues));
+		// dispatch(createApplication(formValues));
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -278,9 +286,25 @@ export default function CreateApplicationModal({open, user, handleClose}: Props)
             textTransform: 'none',
           }}
         >
-          Отправить
+          Сохранить
         </Button>
 
+        <Button
+          type="submit"
+          color= 'error'
+          fullWidth
+          variant="text"
+          disableRipple
+          sx={{
+            mt: 3,
+            mb: 1.5,
+            height: '3.5rem',
+            borderRadius: '8px',
+            textTransform: 'none',
+          }}
+        >
+          Удалить
+        </Button>
       </Box>
 
 

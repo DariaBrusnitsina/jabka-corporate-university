@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "redux";
 import { RootState } from "./store";
 import { mockSchedule } from "../mock/schedule";
-import { IStudent, ISubject } from "../Pages/Calendar/Calendar";
+import { IStudent, ISubject } from "../Pages/Schedule /Schedule";
 
 export interface ISchedule {
   id: number

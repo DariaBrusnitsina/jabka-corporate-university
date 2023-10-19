@@ -5,9 +5,6 @@ import { getCurrentUserData } from "../../store/userReducer";
 export default function Profile() {
   const currentUser = useSelector(getCurrentUserData());
 
-
-
-
   // currentUser?.login
   // currentUser?.photo
   return (

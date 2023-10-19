@@ -128,10 +128,13 @@ export const getCurrentUserWithToken = (id: string) => {
       const response = await axios.get(`http://158.160.49.7:8080/api/user/${id}`, {headers: {'Authorization': `Bearer ${token}`}})
       dispatch(fetchDataSuccess(response.data));
     } catch (error) {
-      dispatch(fetchDataFailure("Неверный логин или пароль"));
+      localStorageService.removeAuthData();
+      dispatch(logout());
     }
   };
 };
+
+
 
 export const isAuthenticated = () => (state: RootState) => state.auth.isAuthenticated;
 export const getAuthErrors = () => (state: RootState) => state.auth.error;
