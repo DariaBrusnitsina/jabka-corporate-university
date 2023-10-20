@@ -1,8 +1,11 @@
-import { Box, Button, FormControl, FormHelperText, InputLabel, Modal, OutlinedInput, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl, FormHelperText, InputLabel, OutlinedInput, Typography } from "@mui/material";
 import { useAppDispatch } from "../../store/store";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Textarea from '@mui/joy/Textarea';
 import { IAuth } from "../../store/userReducer";
+import { deleteApplicationById, updateApplication } from "../../store/applicationReducer";
+import { toast } from "react-toastify";
+
 
 interface FormParams {
   leaderName?: string;
@@ -12,17 +15,6 @@ interface FormParams {
   personalAchievements?: string;
   motivationMessage?: string;
 }
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  overflow: 'scroll',
-  p: 4,
-};
 
 interface IApplication {
   id? :number
@@ -43,10 +35,7 @@ interface Props {
   handleClose: () => void;
 }
 
-
 export default function EditApplicationModal({open, application, user, handleClose}: Props) {
-  const xs = useMediaQuery('(max-width:550px)');
-	const sm = useMediaQuery('(max-width:750px)');
   const dispatch = useAppDispatch()
 
   if (!user) {
@@ -75,10 +64,8 @@ export default function EditApplicationModal({open, application, user, handleClo
   const [formErrors, setFormErrors] = useState<FormParams>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-
   const submit = () => {
-    console.log('formValues', formValues)
-		// dispatch(createApplication(formValues));
+		dispatch(updateApplication(formValues));
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -95,6 +82,13 @@ export default function EditApplicationModal({open, application, user, handleClo
     e.preventDefault();
     setFormErrors(validate(formValues));
     setIsSubmitting(true);
+    handleClose()
+
+    toast.success("Форма отправлена!", {
+      position: 'bottom-left',
+      autoClose: 3000,
+    })
+
   };
 
   const validate = (values: FormParams) => {
@@ -133,29 +127,31 @@ export default function EditApplicationModal({open, application, user, handleClo
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmitting) {
       submit();
+
     }
   }, [formErrors, isSubmitting]);
 
   function handleAppClose() {
     handleClose()
-    setFormErrors({})
   }
 
-  return (
-    <div>
-      <Modal
-        open={open}
-        onClose={handleAppClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
+  function handleDelete() {
+    if (formValues.id) {
+      console.log(formValues.id)
+      dispatch(deleteApplicationById(formValues.id))
+      handleClose()
+    }
+  }
 
+
+  return (
+    <Dialog open={open} onClose={handleAppClose} fullWidth maxWidth="md">
+      <DialogContent sx={{height: '90vh'}} >
+        <DialogTitle>Создать заявление</DialogTitle>
         <Box
         component="form"
         onSubmit={handleSubmit}
         noValidate
-        width={sm ? (xs ? '11rem' : '25rem') : '32.5rem'}
       >
 
         {/* userData */}
@@ -269,6 +265,7 @@ export default function EditApplicationModal({open, application, user, handleClo
 
           />
 
+
         </Box>
 
         {/* {isSubmitting && Object.keys(formErrors).length === 0 && <Typography sx={{ display: 'block', marginTop: '20px', textAlign: 'center' }} color='#FF3C02'>{authError ? authError : ""}</Typography>} */}
@@ -290,6 +287,7 @@ export default function EditApplicationModal({open, application, user, handleClo
         </Button>
 
         <Button
+        onClick={handleDelete}
           type="submit"
           color= 'error'
           fullWidth
@@ -307,9 +305,8 @@ export default function EditApplicationModal({open, application, user, handleClo
         </Button>
       </Box>
 
+      </DialogContent>
 
-        </Box>
-      </Modal>
-    </div>
+    </Dialog>
   );
 }

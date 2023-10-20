@@ -15,6 +15,7 @@ export interface IAuth {
   photo?: string;
   activationStatus?: null | string;
   grop: string
+  roles?: {id: number, name: string}[]
 }
 interface authState {
   entities: IAuth | null;

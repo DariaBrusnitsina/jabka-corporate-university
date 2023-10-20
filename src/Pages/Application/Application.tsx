@@ -3,39 +3,64 @@ import { useEffect, useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
 import localStorageService from "../../services/localStorage.service";
 import { useAppDispatch } from "../../store/store";
-import { getUserApplicationById, getUserApplications } from "../../store/applicationReducer";
+import { getUserApplicationById, getUserApplication, getApplicationError, IApplication } from "../../store/applicationReducer";
 import { useSelector } from "react-redux";
 import CreateApplicationModal from "./CreateApplicationModal";
 import { getCurrentUserData } from "../../store/userReducer";
 import EditApplicationModal from "./EditApplicationModal";
+import { toast } from "react-toastify";
+
+const statuses = [
+  {name: 'ON_MODERATION', label: 'На модерации'},
+  {name: 'DENIED',  label: 'Отклонено'},
+  {name: 'APPROVED', label: 'Принято'},
+  {name: 'IN_RESERVE', label: 'В резерве'},
+]
 
 export default function Application() {
+    //modal
+    const [openCreate, setOpenCreate] = useState(false);
+    const handleOpenCreate = () => setOpenCreate(true);
+    const handleCloseCreate = () => setOpenCreate(false);
+    const [openEdit, setOpenEdit] = useState(false);
+    const handleOpenEdit = () => setOpenEdit(true);
+    const handleCloseEdit = () => setOpenEdit(false);
+
   const userId = localStorageService.getUserId()
   const dispatch = useAppDispatch()
-  const application = useSelector(getUserApplications())
+  const application = useSelector(getUserApplication())
   const currentUser = useSelector(getCurrentUserData());
+  const reqError = useSelector(getApplicationError())
 
-
-  console.log('application', application)
+  useEffect(() => {
+    if (reqError) {
+      toast.error(reqError, {
+        position: 'top-right',
+        autoClose: 3000, // Закрыть уведомление через 3 секунды (по желанию)
+      });
+    }
+  }, [reqError]);
 
   useEffect(() => {
     dispatch(getUserApplicationById(Number(userId)))
   }, []);
 
-  //modal
-  const [openCreate, setOpenCreate] = useState(false);
-  const handleOpenCreate = () => setOpenCreate(true);
-  const handleCloseCreate = () => setOpenCreate(false);
-  const [openEdit, setOpenEdit] = useState(false);
-  const handleOpenEdit = () => setOpenEdit(true);
-  const handleCloseEdit = () => setOpenEdit(false);
-
-
+  function handleFindColor(a: IApplication) {
+    if (a.requestStatus === 'ON_MODERATION') {
+      return 'warning';
+    } else if (a.requestStatus === 'DENIED') {
+      return 'error'
+    } else if (a.requestStatus === 'APPROVED') {
+      return 'success'
+    } else if (a.requestStatus === 'IN_RESERVE') {
+      return 'secondary'
+    }
+  }
 
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" my={5}>
-        <Typography variant="h4">Заявления</Typography>
+        <Typography variant="h4">Мои заявления</Typography>
 
         {!application && <Button variant="contained" color="secondary" startIcon={<AddIcon />} onClick={handleOpenCreate}>
           Создать заявление
@@ -43,10 +68,8 @@ export default function Application() {
       </Stack>
 
       <Box>
-      <Typography my={3} variant="h5">Созданные заявления</Typography>
-
       {application ? <Card sx={{ maxWidth: 400 }}>
-      <Chip sx={{margin: '10px'}} label={application.requestStatus === null ? "На рассмотрении" : ""} color="error"/>
+      <Chip sx={{margin: '10px'}} label={statuses.find((s)=> s.name === application.requestStatus)?.label} color={handleFindColor(application)}/>
       <CardContent>
       <Typography variant="h5" component="div">
         Название подразделения: {application.subunitName}
@@ -65,7 +88,6 @@ export default function Application() {
     </Card> :
     <Typography>У вас нет заявлений</Typography>
     }
-
 
       </Box>
 

@@ -3,7 +3,7 @@ import Navigation from './components/Navigation/Navigation'
 import Main from './Pages/Main/Main'
 import AuthLayout from './Layouts/AuthLayout'
 import News from './Pages/News/News'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useAppDispatch } from './store/store'
 import { fetchNews } from './store/newsReducer'
 import NewsPost from './Pages/NewsPost/NewsPost'
@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux'
 import Profile from './Pages/Profile/Profile'
 import Application from './Pages/Application/Application'
 import Schedule from './Pages/Schedule /Schedule'
+import Applications from './Pages/Applications/Applications'
 
 export default function App() {
   const dispatch = useAppDispatch()
@@ -43,8 +44,7 @@ export default function App() {
       <Route path='/calendar' element={<Schedule />}/>
       <Route path='/profile' element={<Profile/>}/>
       <Route path='/application' element={<Application />}/>
-
-
+      <Route path='/applications' element={<Applications />}/>
 
       <Route path="news">
         <Route index element={<News />}/>

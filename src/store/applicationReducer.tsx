@@ -41,10 +41,14 @@ const applicationSlice = createSlice({
     fetchDataSuccess: (state, action: PayloadAction<IApplication>) => {
       state.entities = action.payload;
       state.error = null;
+      state.loading = false
+    },
+    fetchDataEnd: (state) => {
+      state.loading = false;
     },
     fetchDataFailure: (state, action: PayloadAction<string>) => {
-      state.entities = null;
       state.error = action.payload;
+      state.loading = false
     }
   },
 });
@@ -53,6 +57,7 @@ export const {
   fetchDataStart,
   fetchDataSuccess,
   fetchDataFailure,
+  fetchDataEnd,
 } = applicationSlice.actions;
 export default applicationSlice.reducer;
 
@@ -70,14 +75,30 @@ export const createApplication = (data: IApplication) => {
   }
 };
 
-export const deleteApplication = (id: number) => {
+export const deleteApplicationById = (id: number) => {
   return async (dispatch: Dispatch) => {
     try {
       const token = localStorageService.getAccessToken()
       dispatch(fetchDataStart());
-      // await axios.delete(`http://158.160.49.7:8080/api/user/request`, {'id': id});
+      await axios.delete(`http://158.160.49.7:8080/api/user/request/${id}`, {headers: {'Authorization': `Bearer ${token}`}} );
       // dispatch(fetchDataSuccess(response.data));
     } catch (error) {
+      dispatch(fetchDataFailure("Что-то пошло не так"));
+    }
+  }
+};
+
+export const updateApplication = (data: IApplication) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      const token = localStorageService.getAccessToken()
+      dispatch(fetchDataStart());
+      const response = await axios.put(`http://158.160.49.7:8080/api/user/request`,data,
+      {headers: {'Authorization': `Bearer ${token}`}});
+      dispatch(fetchDataSuccess(response.data));
+
+    } catch (error) {
+      console.log(error);
       dispatch(fetchDataFailure("Что-то пошло не так"));
     }
   }
@@ -92,13 +113,13 @@ export const getUserApplicationById = (id: number) => {
       dispatch(fetchDataStart());
       const response = await axios.get(`http://158.160.49.7:8080/api/user/request/user/${id}`,
        {headers: {'Authorization': `Bearer ${token}`}});
-       console.log(response)
       dispatch(fetchDataSuccess(response.data));
     } catch (error) {
-      dispatch(fetchDataFailure("Что-то пошло не так"));
+      dispatch(fetchDataEnd());
     }
   }
 };
 
-export const getUserApplications = () => (state: RootState) => state.application.entities;
-
+export const getUserApplication = () => (state: RootState) => state.application.entities;
+export const getApplicationError = () => (state: RootState) => state.application.error;
+export const getApplicationLoading = () => (state: RootState) => state.application.loading;

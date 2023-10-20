@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormHelperText, InputLabel, Modal, OutlinedInput, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormHelperText, InputLabel, OutlinedInput, Typography, useMediaQuery } from "@mui/material";
 import { useAppDispatch } from "../../store/store";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Textarea from '@mui/joy/Textarea';
@@ -13,16 +13,6 @@ interface FormParams {
   personalAchievements?: string;
   motivationMessage?: string;
 }
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-};
 
 interface IApplication {
   id? :number
@@ -45,8 +35,6 @@ interface Props {
 
 
 export default function CreateApplicationModal({open, user, handleClose}: Props) {
-  const xs = useMediaQuery('(max-width:550px)');
-	const sm = useMediaQuery('(max-width:750px)');
   const dispatch = useAppDispatch()
 
   if (!user) {
@@ -67,10 +55,9 @@ export default function CreateApplicationModal({open, user, handleClose}: Props)
   const [formErrors, setFormErrors] = useState<FormParams>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-
   const submit = () => {
-    console.log('formValues', formValues)
 		dispatch(createApplication(formValues));
+    handleAppClose()
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -130,30 +117,22 @@ export default function CreateApplicationModal({open, user, handleClose}: Props)
 
   function handleAppClose() {
     handleClose()
-    setFormErrors({})
   }
 
   return (
-    <div>
-      <Modal
-        open={open}
-        onClose={handleAppClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-
+    <Dialog open={open} onClose={handleAppClose} fullWidth maxWidth="md">
+      <DialogContent sx={{height: '90vh'}} >
+        <DialogTitle>Создать заявление</DialogTitle>
         <Box
         component="form"
         onSubmit={handleSubmit}
         noValidate
-        width={sm ? (xs ? '11rem' : '25rem') : '32.5rem'}
       >
-
         {/* userData */}
         <FormControl
           sx={{ marginTop: '20px', width: '100%' }}
           variant="outlined"
+
         >
           <InputLabel htmlFor="leaderName">ФИО</InputLabel>
           <OutlinedInput
@@ -245,7 +224,7 @@ export default function CreateApplicationModal({open, user, handleClose}: Props)
             variant="soft"
             color={formErrors.personalAchievements ? 'danger' : 'primary'}
           />
-          </Box>
+        </Box>
 
         {/* motivationMessage */}
         <Box width={'100%'} my={2}>
@@ -260,12 +239,9 @@ export default function CreateApplicationModal({open, user, handleClose}: Props)
             color={formErrors.motivationMessage ? 'danger' : 'primary'}
 
           />
+          </Box>
 
-        </Box>
-
-        {/* {isSubmitting && Object.keys(formErrors).length === 0 && <Typography sx={{ display: 'block', marginTop: '20px', textAlign: 'center' }} color='#FF3C02'>{authError ? authError : ""}</Typography>} */}
-
-        <Button
+          <Button
           type="submit"
           fullWidth
           variant="contained"
@@ -281,11 +257,9 @@ export default function CreateApplicationModal({open, user, handleClose}: Props)
           Отправить
         </Button>
 
-      </Box>
-
-
         </Box>
-      </Modal>
-    </div>
+
+      </DialogContent>
+      </Dialog>
   );
 }

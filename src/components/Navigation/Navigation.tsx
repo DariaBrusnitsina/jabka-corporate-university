@@ -20,7 +20,7 @@ import { getCurrentUserData, logOut } from '../../store/userReducer';
 import localStorageService from '../../services/localStorage.service';
 import { useAppDispatch } from '../../store/store';
 
-const pages = [{title: 'Новости', path: '/news'}, {title: 'Преподаватели и сотрудники', path: '/professors'}, {title: 'Расписание', path: '/calendar'}, {title: 'Заявления', path: 'application'}];
+// const pages = [{title: 'Новости', path: '/news'}, {title: 'Расписание', path: '/calendar'}, {title: 'Мои заявления', path: 'application'}];
 const settings = [{title: 'Профиль', action: 'profile'}, {title: 'Выйти', action: 'logout'}]
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -32,6 +32,8 @@ function Navigation() {
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const isEnrollee = currentUser?.roles?.find((r) => r.name === 'ROLE_ENROLLEE') !== undefined
+  const isCommittee = currentUser?.roles?.find((r) => r.name === 'ROLE_COMMITTEE') !== undefined
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -107,11 +109,20 @@ function Navigation() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page.title} onClick={() => handleCloseNavMenu(page.path)}>
-                  <Typography textAlign="center">{page.title}</Typography>
-                </MenuItem>
-              ))}
+
+              {/* pages */}
+              <MenuItem onClick={() => handleCloseNavMenu('news')}>
+                  <Typography textAlign="center">Новости</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => handleCloseNavMenu('calendar')}>
+                  <Typography textAlign="center">Расписание</Typography>
+              </MenuItem>
+              {isEnrollee &&
+              <MenuItem onClick={() => handleCloseNavMenu('application')}>
+                  <Typography textAlign="center">Мои заявления</Typography>
+              </MenuItem>
+              }
+
             </Menu>
           </Box>
           <SchoolIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -134,15 +145,33 @@ function Navigation() {
             JABKA
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page.title}
-                onClick={() => handleCloseNavMenu(page.path)}
+            {/* pages */}
+
+            <Button
+                onClick={() => handleCloseNavMenu('news')}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page.title}
-              </Button>
-            ))}
+                Новости
+            </Button>
+            <Button
+                onClick={() => handleCloseNavMenu('news')}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Новости
+            </Button>
+            {!isEnrollee && <Button
+                onClick={() => handleCloseNavMenu('application')}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Мои заявления
+            </Button>}
+            {!isCommittee && <Button
+                onClick={() => handleCloseNavMenu('applications')}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Просмотр заявлений
+            </Button>}
+
           </Box>
 
           {userId ? <Box sx={{ flexGrow: 0 }}>

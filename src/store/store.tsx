@@ -3,12 +3,14 @@ import { useDispatch } from 'react-redux';
 import authReducer from './userReducer';
 import newsReducer from './newsReducer';
 import applicationReducer from './applicationReducer';
+import applicationsReducer from './applicationsReducer';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     news: newsReducer,
-    application: applicationReducer
+    application: applicationReducer,
+    applications: applicationsReducer
   },
 });
 
