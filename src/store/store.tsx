@@ -4,13 +4,15 @@ import authReducer from './userReducer';
 import newsReducer from './newsReducer';
 import applicationReducer from './applicationReducer';
 import applicationsReducer from './applicationsReducer';
+import scheduleReducer from './scheduleReducer';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     news: newsReducer,
     application: applicationReducer,
-    applications: applicationsReducer
+    applications: applicationsReducer,
+    schedule: scheduleReducer
   },
 });
 

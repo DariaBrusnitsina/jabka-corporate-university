@@ -1,11 +1,9 @@
-import { lazy, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import Loadable from "../components/ui-components/Loadable";
 import { Box, Button, Typography } from "@mui/material";
-// import AuthLogin from "../Pages/Authentication/AuthLogin";
+import AuthRegistration from "../Pages/Authentication/AuthRegistration";
+import AuthLogin from "../Pages/Authentication/AuthLogin";
 
-const AuthLogin = Loadable(lazy(() => import('../Pages/Authentication/AuthLogin')));
-const AuthRegistration = Loadable(lazy(() => import('../Pages/Authentication/AuthRegistration')));
 
 function AuthLayout() {
     const { type } = useParams();
@@ -24,7 +22,7 @@ function AuthLayout() {
           {formType === 'register' ? (
             <>
               <Typography variant="h4" textAlign='center' mb={3}>Регистрация</Typography>
-                <AuthRegistration />
+                <AuthRegistration changeType={toggleFormType}/>
                 <Typography variant="subtitle2" color="text.secondary" mb={3}>Звездочкой* отмечены обязательные поля</Typography>
 
                 <Button variant="text" sx={{ textTransform: 'none'}} onClick={toggleFormType}>Уже есть аккаунт? Войти</Button>

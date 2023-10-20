@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux"
 import { INews, getAllNews } from "../../store/newsReducer"
-import { Box, Button, Container, Divider, MenuItem, Pagination, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, Container, Divider, LinearProgress, MenuItem, Pagination, Stack, TextField, Typography } from "@mui/material"
 import NewsCard from "./NewsCard"
 import AddIcon from '@mui/icons-material/Add';
 import { ChangeEvent, useState } from "react";
@@ -30,7 +30,7 @@ function News() {
   const handleClose = () => setOpen(false);
 
   if (!news) {
-    return <p>Loading</p>
+    return <LinearProgress />
   }
 
   const handleChange = (e: ChangeEvent<unknown>, value: number) => {

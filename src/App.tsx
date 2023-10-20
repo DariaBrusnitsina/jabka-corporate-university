@@ -24,9 +24,7 @@ export default function App() {
 
     if (id && !isAuth) {
       dispatch(getCurrentUserWithToken(id))
-      console.log("Access token", isAuth)
     } else {
-      // setLoading(false);
     }
 }, []);
 

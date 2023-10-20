@@ -16,7 +16,12 @@ interface FormParams {
   passwordRepeated?: string;
 }
 
-function AuthRegistration() {
+interface Props {
+	changeType: () => void;
+}
+
+
+function AuthRegistration({changeType}: Props) {
 	const dispatch = useAppDispatch()
 	const [showPassword, setShowPassword] = useState(false);
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -43,6 +48,8 @@ function AuthRegistration() {
 			dispatch(register(formValues.login, formValues.password,formValues.email,formValues.name,formValues.surname
 		 ))
 		}
+
+		changeType();
 
 	};
 

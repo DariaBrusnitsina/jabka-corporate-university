@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActions, CardContent, Chip, Container, FormControl, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, CardActions, CardContent, Chip, Container, FormControl, InputLabel, LinearProgress, MenuItem, Modal, Select, SelectChangeEvent, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../store/store";
 import { useSelector } from "react-redux";
@@ -97,6 +97,10 @@ export default function Applications() {
   useEffect(() => {
     dispatch(getAllUserApplications())
   }, [dispatch, submit]);
+
+  if (!applications) {
+    return <LinearProgress />
+  }
 
   return (
     <Container>

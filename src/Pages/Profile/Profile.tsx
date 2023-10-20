@@ -1,10 +1,14 @@
-import { Box, Container, Stack, Typography } from "@mui/material";
+import { Box, Container, LinearProgress, Stack, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { getCurrentUserData } from "../../store/userReducer";
 
 export default function Profile() {
   const currentUser = useSelector(getCurrentUserData());
 
+
+  if (!currentUser) {
+    return <LinearProgress />
+  }
   // currentUser?.login
   // currentUser?.photo
   return (

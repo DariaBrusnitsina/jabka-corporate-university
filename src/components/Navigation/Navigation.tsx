@@ -20,9 +20,7 @@ import { getCurrentUserData, logOut } from '../../store/userReducer';
 import localStorageService from '../../services/localStorage.service';
 import { useAppDispatch } from '../../store/store';
 
-// const pages = [{title: 'Новости', path: '/news'}, {title: 'Расписание', path: '/calendar'}, {title: 'Мои заявления', path: 'application'}];
 const settings = [{title: 'Профиль', action: 'profile'}, {title: 'Выйти', action: 'logout'}]
-// const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navigation() {
   const navigate = useNavigate()
@@ -146,7 +144,6 @@ function Navigation() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {/* pages */}
-
             <Button
                 onClick={() => handleCloseNavMenu('news')}
                 sx={{ my: 2, color: 'white', display: 'block' }}
@@ -154,10 +151,10 @@ function Navigation() {
                 Новости
             </Button>
             <Button
-                onClick={() => handleCloseNavMenu('news')}
+                onClick={() => handleCloseNavMenu('calendar')}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                Новости
+                Расписание
             </Button>
             {!isEnrollee && <Button
                 onClick={() => handleCloseNavMenu('application')}

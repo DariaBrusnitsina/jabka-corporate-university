@@ -1,4 +1,4 @@
-import { Box, Button, Container, Stack, Typography } from "@mui/material"
+import { Box, Button, Container, LinearProgress, Stack, Typography } from "@mui/material"
 import NewsCard from "../News/NewsCard"
 import { useSelector } from "react-redux"
 import { getAllNews } from "../../store/newsReducer"
@@ -10,21 +10,27 @@ function Main() {
   const navigate = useNavigate()
   const selectedNews = news?.slice(0, 3)
 
-  return (
-    <Container>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" my={5}>
-        <Typography variant="h4">Главное</Typography>
-        <Button onClick={() => navigate('/news')}variant="text" endIcon={<KeyboardArrowRightIcon />}>Все новости</Button>
-      </Stack>
+  if (!news) {
+    return <LinearProgress />
+  }
 
-    <Box>
-      <Box display='flex' columnGap={4}>
-        {selectedNews && selectedNews.map((post) => (
-      <NewsCard key={post.id} post={post} />
-        ))}
-      </Box>
-      </Box>
-    </ Container>
+  return (
+    <>
+    <Container>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" my={5}>
+          <Typography variant="h4">Главное</Typography>
+          <Button onClick={() => navigate('/news')} variant="text" endIcon={<KeyboardArrowRightIcon />}>Все новости</Button>
+        </Stack>
+
+        <Box>
+          <Box display='flex' columnGap={4}>
+            {selectedNews && selectedNews.map((post) => (
+              <NewsCard key={post.id} post={post} />
+            ))}
+          </Box>
+        </Box>
+      </Container>
+      </>
   )
 }
 

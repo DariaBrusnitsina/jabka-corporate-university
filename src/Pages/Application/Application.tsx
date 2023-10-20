@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActions, CardContent, Chip, Container, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, CardActions, CardContent, Chip, Container, LinearProgress, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
 import localStorageService from "../../services/localStorage.service";
@@ -55,6 +55,10 @@ export default function Application() {
     } else if (a.requestStatus === 'IN_RESERVE') {
       return 'secondary'
     }
+  }
+
+  if (!application) {
+    return <LinearProgress />
   }
 
   return (
