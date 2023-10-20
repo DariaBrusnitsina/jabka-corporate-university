@@ -1,7 +1,8 @@
-import { Box, Button, Chip, FormControl, FormHelperText, InputLabel, Modal, OutlinedInput, TextField, Typography, styled, useMediaQuery } from "@mui/material";
+import { Box, Button, Chip, FormControl, FormHelperText, InputLabel, Modal, OutlinedInput, TextField, Typography, useMediaQuery } from "@mui/material";
 import { useAppDispatch } from "../../store/store";
 import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useState } from "react";
 import Textarea from '@mui/joy/Textarea';
+import { INews, createNewsPost, deleteNewsPostById, editNewsPost, fetchNews } from "../../store/newsReducer";
 
 interface FormParams {
   header?: string;
@@ -53,7 +54,13 @@ export default function EditNewsModal({open, post, handleClose, isEdit}: Props) 
 
 
   const submit = () => {
-		// dispatch(login(formValues.login, formValues.password));
+    if (isEdit) {
+      dispatch(editNewsPost(formValues as INews))
+      dispatch(fetchNews())
+    } else {
+      dispatch(createNewsPost(formValues as INews))
+      dispatch(fetchNews())
+    }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -63,9 +70,9 @@ export default function EditNewsModal({open, post, handleClose, isEdit}: Props) 
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(formValues)
     setFormErrors(validate(formValues));
     setIsSubmitting(true);
-    console.log(formValues.hashtags)
   };
 
   const validate = (values: IPartialNews) => {
@@ -75,9 +82,15 @@ export default function EditNewsModal({open, post, handleClose, isEdit}: Props) 
       errors.header = "Это поле не может быть пустым!";
     }
 
-    if (!values.header) {
-      errors.header = "Это поле не может быть пустым!";
+    if (!values.hashtags) {
+      errors.header = "Добавьте теги!";
     }
+
+
+    if (!values.text) {
+      errors.text = "Это поле не может быть пустым!";
+    }
+
 
     return errors
   };
@@ -112,6 +125,19 @@ export default function EditNewsModal({open, post, handleClose, isEdit}: Props) 
       return { ...prev, hashtags: filteredTags };
     });
   }
+
+  const handleChangeTextarea = (e: ChangeEvent<HTMLTextAreaElement>, name: string) => {
+    const { value } = e.target;
+    setFormValues((prev) => {return { ...prev, [name]: value }});
+  };
+
+  function handleDeletePost() {
+    if (formValues) {
+      dispatch(deleteNewsPostById(Number(formValues.id)))
+      dispatch(fetchNews())
+    }
+  }
+
 
   return (
     <div>
@@ -160,6 +186,8 @@ export default function EditNewsModal({open, post, handleClose, isEdit}: Props) 
 
             <Box>
             <TextField onKeyDown={handleKeyDown} id="standard-basic" label="Добавить тег" variant="standard" />
+            <FormHelperText id="header">{formErrors.header ? formErrors.header : ''}</FormHelperText>
+
             </Box>
         </Box>
 
@@ -167,6 +195,9 @@ export default function EditNewsModal({open, post, handleClose, isEdit}: Props) 
           <Typography variant="h5">Текст новости</Typography>
 
           <Textarea
+            onChange={(e) => handleChangeTextarea(e, "text")}
+
+            color={formErrors.text ? 'danger' : 'primary'}
             minRows={2}
             size="sm"
             defaultValue={formValues.text}
@@ -191,6 +222,23 @@ export default function EditNewsModal({open, post, handleClose, isEdit}: Props) 
         >
           Сохранить
         </Button>
+
+        {isEdit && <Button
+          fullWidth
+          color="error"
+          onClick={handleDeletePost}
+          variant="text"
+          disableRipple
+          sx={{
+            mt: 3,
+            mb: 1.5,
+            height: '3.5rem',
+            borderRadius: '8px',
+            textTransform: 'none',
+          }}
+        >
+          Удалить
+        </Button>}
       </Box>
 
 

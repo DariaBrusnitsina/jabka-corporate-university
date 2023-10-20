@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import axios from "axios";
 import { Dispatch } from "redux";
 import { RootState } from "./store";
-import { mockNews } from "../mock/news";
 import axios from "axios";
+import localStorageService from "../services/localStorage.service";
 
 export interface INews {
   header: string;
@@ -57,8 +57,46 @@ export const fetchNews = () => {
     try {
       dispatch(fetchDataStart());
       const response = await axios.get('http://158.160.49.7:8080/api/news');
-      // dispatch(fetchDataSuccess(mockNews));
       dispatch(fetchDataSuccess(response.data));
+    } catch (error) {
+      dispatch(fetchDataFailure("Что-то пошло не так"));
+    }
+  }
+};
+
+export const createNewsPost = (data: INews) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      dispatch(fetchDataStart());
+      const token = localStorageService.getAccessToken();
+
+      await axios.post(`http://158.160.49.7:8080/api/news`, data, { headers: { Authorization: `Bearer ${token}` } });
+    } catch (error) {
+      dispatch(fetchDataFailure("Что-то пошло не так"));
+    }
+  }
+};
+
+
+export const editNewsPost = (data: INews) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      dispatch(fetchDataStart());
+      const token = localStorageService.getAccessToken();
+
+      await axios.put(`http://158.160.49.7:8080/api/news/${data.id}`, data, { headers: { Authorization: `Bearer ${token}` } });
+    } catch (error) {
+      dispatch(fetchDataFailure("Что-то пошло не так"));
+    }
+  }
+};
+
+export const deleteNewsPostById = (id: number) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      const token = localStorageService.getAccessToken()
+      dispatch(fetchDataStart());
+      await axios.delete(`http://158.160.49.7:8080/api/news/${id}`, {headers: {'Authorization': `Bearer ${token}`}} );
     } catch (error) {
       dispatch(fetchDataFailure("Что-то пошло не так"));
     }
