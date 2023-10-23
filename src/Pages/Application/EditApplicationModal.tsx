@@ -2,7 +2,7 @@ import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl, FormHelpe
 import { useAppDispatch } from "../../store/store";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Textarea from '@mui/joy/Textarea';
-import { IAuth } from "../../store/userReducer";
+import { IAuth } from "../../store/authReducer";
 import { deleteApplicationById, updateApplication } from "../../store/applicationReducer";
 import { toast } from "react-toastify";
 

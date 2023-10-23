@@ -2,30 +2,39 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "redux";
 import { RootState } from "./store";
 import axios from "axios";
-import { IAuth } from "./authReducer";
-import localStorageService from "../services/localStorage.service";
 
-interface UserState {
-  entities: IAuth[] | null
+export interface ISubject {
+  id: number
+  name: string
+  studyGroupsIds: number[]
+  schedule: string[]
+  creatorId: number,
+  editorsIds: number[]
+  scheduleIds: number[]
+  studyMaterialsIds: number[]
+}
+
+
+interface SubjectState {
+  entities: ISubject[] | null
   error: string | null
   loading: boolean
 }
 
-const initialState: UserState = {
+const initialState: SubjectState = {
   entities: null,
   error: null,
   loading: false
 };
-
-const userSlice = createSlice({
-  name: "user",
+const subjectSlice = createSlice({
+  name: "subject",
   initialState,
   reducers: {
     fetchDataStart: (state) => {
       state.loading = true;
       state.error = null;
     },
-    fetchDataSuccess: (state, action: PayloadAction<IAuth[]>) => {
+    fetchDataSuccess: (state, action: PayloadAction<ISubject[]>) => {
       state.entities = action.payload;
       state.error = null;
     },
@@ -40,18 +49,14 @@ export const {
   fetchDataStart,
   fetchDataSuccess,
   fetchDataFailure,
-} = userSlice.actions;
-export default userSlice.reducer;
+} = subjectSlice.actions;
+export default subjectSlice.reducer;
 
-export const fetchAllUsers = () => {
+export const fetchAllSubjects = () => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch(fetchDataStart());
-      const token = localStorageService.getAccessToken()
-      const response = await axios.get(
-        `http://158.160.49.7:8080/api/user`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const response = await axios.get(`http://158.160.49.7:8080/api/study/subject`);
       dispatch(fetchDataSuccess(response.data));
     } catch (error) {
       dispatch(fetchDataFailure("Что-то пошло не так"));
@@ -59,10 +64,10 @@ export const fetchAllUsers = () => {
   }
 };
 
-export const getUserById = (id: number | undefined) => (state: RootState) => {
-  if (state.user.entities && id !== undefined) {
-      return state.user.entities.find((n) => n.id === id);
+export const getSubjectById = (id: number | undefined) => (state: RootState) => {
+  if (state.subject.entities && id !== undefined) {
+      return state.subject.entities.find((n) => n.id === id);
   }
 };
 
-export const getAllUsers = () => (state: RootState) => state.user.entities;
+export const getAllSubjects = () => (state: RootState) => state.subject.entities;

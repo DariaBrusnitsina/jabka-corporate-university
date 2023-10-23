@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
-import { getAuthErrors, isAuthenticated, register } from '../../store/userReducer';
+import { getAuthErrors, isAuthenticated, register } from '../../store/authReducer';
 import { Box, Button, Divider, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography, useMediaQuery } from '@mui/material';
 import { useAppDispatch } from '../../store/store';
 

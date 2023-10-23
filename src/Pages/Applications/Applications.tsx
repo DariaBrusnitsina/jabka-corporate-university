@@ -2,7 +2,7 @@ import { Box, Button, Card, CardActions, CardContent, Chip, Container, FormContr
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../store/store";
 import { useSelector } from "react-redux";
-import { IAuth } from "../../store/userReducer";
+import { IAuth } from "../../store/authReducer";
 import { toast } from "react-toastify";
 import { getAllUserApplications, getApplicationsError, getUserApplications } from "../../store/applicationsReducer";
 import { IApplication, updateApplication } from "../../store/applicationReducer";

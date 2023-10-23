@@ -1,10 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
-import authReducer from './userReducer';
+import authReducer from './authReducer';
 import newsReducer from './newsReducer';
 import applicationReducer from './applicationReducer';
 import applicationsReducer from './applicationsReducer';
 import scheduleReducer from './scheduleReducer';
+import groupReducer from './groupReducer';
+import subjectReducer from './subjectReducer';
+import userReducer from './userReducer';
 
 export const store = configureStore({
   reducer: {
@@ -12,7 +15,10 @@ export const store = configureStore({
     news: newsReducer,
     application: applicationReducer,
     applications: applicationsReducer,
-    schedule: scheduleReducer
+    schedule: scheduleReducer,
+    group: groupReducer,
+    subject: subjectReducer,
+    user: userReducer
   },
 });
 

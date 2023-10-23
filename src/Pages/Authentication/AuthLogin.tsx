@@ -2,7 +2,7 @@ import { Box, Button, FormControl, FormHelperText, IconButton, InputAdornment, I
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useAppDispatch } from '../../store/store';
-import { getAuthErrors, isAuthenticated, login } from '../../store/userReducer';
+import { getAuthErrors, isAuthenticated, login } from '../../store/authReducer';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,39 +1,43 @@
-import { Box, Card, Container, LinearProgress, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
-import { ISchedule, fullSchedule, getFullSchedule } from "../../store/scheduleReducer";
+import { Button, Container, LinearProgress, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { fullSchedule, getFullSchedule } from "../../store/scheduleReducer";
 import { useAppDispatch } from "../../store/store";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { fetchAllGroups, getAllGroups } from "../../store/groupReducer";
+import { fetchAllSubjects, getAllSubjects } from "../../store/subjectReducer";
 
 function formatDate(dateString: string) {
-  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const options :Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const date = new Date(dateString);
   return date.toLocaleDateString('ru-RU', options);
 }
 
-function sortByDate(array: ISchedule[]) {
-  return array.sort((a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
-    return dateA - dateB;
-  });
-}
-
 export default function Schedule () {
   const dispatch = useAppDispatch()
-  const [selectedDate, handleDateChange] = useState(null);
+  const navigate = useNavigate()
   const schedule = useSelector(fullSchedule())
-  const [sortedSc, setSortedSc]  = useState<ISchedule[] | null>(schedule);
+  const groups = useSelector(getAllGroups())
+  const subjects = useSelector(getAllSubjects())
 
-  if (schedule !== null) {
-  const sorted =  sortByDate(schedule)
-  setSortedSc(sorted)
-
+  function findGroupById(id: number) {
+    const group = groups?.find((n) => n.id === id);
+    if (group) {
+      return group.name
+    }
   }
 
+  function findSubjectsById(id: number) {
+    const subject = subjects?.find((n) => n.id === id);
+    if (subject) {
+      return subject.name
+    }
+  }
 
   useEffect(() => {
     dispatch(getFullSchedule())
-
+    dispatch(fetchAllGroups())
+    dispatch(fetchAllSubjects())
   }, []);
 
 
@@ -41,7 +45,6 @@ export default function Schedule () {
     return <LinearProgress />
   }
 
-  console.log(schedule)
 
   return (
     <Container>
@@ -54,7 +57,7 @@ export default function Schedule () {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Время</TableCell>
+              <TableCell>Дата</TableCell>
               <TableCell>Предмет</TableCell>
               <TableCell>Группа</TableCell>
               <TableCell>Преподаватель</TableCell>
@@ -64,16 +67,17 @@ export default function Schedule () {
           <TableBody>
             {schedule.map((s) => (
               <TableRow key={s.date}>
-                <TableCell>{formatDate(s.date)}</TableCell>
-                <TableCell>{s.subject.name}</TableCell>
-                <TableCell>{s.studyGroup.name}</TableCell>
-                <TableCell>{s.professor.name}</TableCell>
+                <TableCell><Button onClick={() => navigate(`/schedule/${s.id}`, {replace: true})} sx={{textTransform: 'none'}}>{formatDate(s.date)}</Button></TableCell>
+                <TableCell><Button onClick={() => navigate(`/subject/${s.subjectId}`, {replace: true})} sx={{textTransform: 'none'}}>{findSubjectsById(s.subjectId)}</Button></TableCell>
+                <TableCell><Button onClick={() => navigate(`/studygroup/${s.studyGroupId}`, {replace: true})} sx={{textTransform: 'none'}}>{findGroupById(s.studyGroupId)}</Button></TableCell>
+                {/* <TableCell>{s.professor.name}</TableCell> */}
                 <TableCell>{s.auditorium}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
       </Container>
   );
 };

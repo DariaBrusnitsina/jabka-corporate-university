@@ -2,30 +2,35 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "redux";
 import { RootState } from "./store";
 import axios from "axios";
-import { IAuth } from "./authReducer";
 import localStorageService from "../services/localStorage.service";
 
-interface UserState {
-  entities: IAuth[] | null
+export interface IGroup {
+  id: number
+  name: string
+  studentsIds: number[]
+}
+
+interface GroupState {
+  entities: IGroup[] | null
   error: string | null
   loading: boolean
 }
 
-const initialState: UserState = {
+const initialState: GroupState = {
   entities: null,
   error: null,
   loading: false
 };
 
-const userSlice = createSlice({
-  name: "user",
+const groupSlice = createSlice({
+  name: "group",
   initialState,
   reducers: {
     fetchDataStart: (state) => {
       state.loading = true;
       state.error = null;
     },
-    fetchDataSuccess: (state, action: PayloadAction<IAuth[]>) => {
+    fetchDataSuccess: (state, action: PayloadAction<IGroup[]>) => {
       state.entities = action.payload;
       state.error = null;
     },
@@ -40,16 +45,16 @@ export const {
   fetchDataStart,
   fetchDataSuccess,
   fetchDataFailure,
-} = userSlice.actions;
-export default userSlice.reducer;
+} = groupSlice.actions;
+export default groupSlice.reducer;
 
-export const fetchAllUsers = () => {
+export const fetchAllGroups = () => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch(fetchDataStart());
       const token = localStorageService.getAccessToken()
       const response = await axios.get(
-        `http://158.160.49.7:8080/api/user`,
+        `http://158.160.49.7:8080/api/study/group`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       dispatch(fetchDataSuccess(response.data));
@@ -59,10 +64,10 @@ export const fetchAllUsers = () => {
   }
 };
 
-export const getUserById = (id: number | undefined) => (state: RootState) => {
-  if (state.user.entities && id !== undefined) {
-      return state.user.entities.find((n) => n.id === id);
+export const getGroupById = (id: number | undefined) => (state: RootState) => {
+  if (state.group.entities && id !== undefined) {
+      return state.group.entities.find((n) => n.id === id);
   }
 };
 
-export const getAllUsers = () => (state: RootState) => state.user.entities;
+export const getAllGroups = () => (state: RootState) => state.group.entities;

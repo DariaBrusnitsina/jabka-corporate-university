@@ -6,7 +6,7 @@ import { useAppDispatch } from "../../store/store";
 import { getUserApplicationById, getUserApplication, getApplicationError, IApplication } from "../../store/applicationReducer";
 import { useSelector } from "react-redux";
 import CreateApplicationModal from "./CreateApplicationModal";
-import { getCurrentUserData } from "../../store/userReducer";
+import { getCurrentUserData } from "../../store/authReducer";
 import EditApplicationModal from "./EditApplicationModal";
 import { toast } from "react-toastify";
 

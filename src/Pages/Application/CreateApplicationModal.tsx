@@ -2,7 +2,7 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormCon
 import { useAppDispatch } from "../../store/store";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Textarea from '@mui/joy/Textarea';
-import { IAuth } from "../../store/userReducer";
+import { IAuth } from "../../store/authReducer";
 import { createApplication } from "../../store/applicationReducer";
 
 interface FormParams {

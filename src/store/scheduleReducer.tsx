@@ -7,13 +7,12 @@ import axios from "axios";
 export interface ISchedule {
   id: number
   date: string
-  studyGroup: {id: number, name: string, studentsIds: number[]}
-  subject: ISubject
+  studyGroupId: number
+  subjectId: number
   classFormat: string
   auditorium: string
   linkForTheClass: string
   professorId: number
-  professor: IProfessor
 }
 
 export interface IProfessor {
@@ -51,191 +50,11 @@ export interface IStudyMaterial {
   filesNames: string[]
 }
 
-export interface ISubject {
-  id: number
-  name: string
-  studyGroup: {id: number, name: string, studentsIds: number[]}[]
-  studyMaterials: IStudyMaterial[]
-  schedule: string[]
-  creatorId: number,
-  editorsIds: number[]
-}
-
 interface scheduleState {
   entities: ISchedule[] | null;
   error: string | null;
   loading: boolean;
 }
-
-
-let mock = [
-  {
-    "id": 0,
-    "date": "2023-10-20T17:17:04.024Z",
-    "studyGroup": {
-      "id": 0,
-      "name": "201",
-      "studentsIds": [
-        0
-      ]
-    },
-    "subject": {
-      "id": 0,
-      "name": "Математика",
-      "studyGroup": [
-        {
-          "id": 0,
-          "name": "201",
-          "studentsIds": [
-            0
-          ]
-        }
-      ],
-      "studyMaterials": [
-        {
-          "id": 0,
-          "studyMaterialsType": "MATERIAL",
-          "materialsText": "string",
-          "subject": "string",
-          "homework": [
-            {
-              "id": 0,
-              "task": "string",
-              "studentId": 0,
-              "date": "2023-10-20T17:17:04.024Z",
-              "grade": 0,
-              "comment": "string",
-              "filesNames": [
-                "string"
-              ],
-              "fileIds": [
-                0
-              ]
-            }
-          ],
-          "filesId": [
-            0
-          ],
-          "filesNames": [
-            "string"
-          ]
-        }
-      ],
-      "schedule": [
-        "string"
-      ],
-      "creatorId": 0,
-      "editorsIds": [
-        0
-      ]
-    },
-    "classFormat": "IN_PERSON",
-    "auditorium": "string",
-    "linkForTheClass": "string",
-    "professorId": 0,
-    "professor": {
-      "id": 0,
-      "login": "string",
-      "name": "string",
-      "surname": "string",
-      "patronymic": "string",
-      "email": "string",
-      "group": "string",
-      "photo": "string",
-      "password": "string",
-      "roles": [
-        {
-          "id": 0,
-          "name": "ROLE_STUDENT"
-        }
-      ],
-      "activationStatus": "ACTIVATED"
-    }
-  },
-  {
-    "id": 0,
-    "date": "2023-10-19T17:17:04.024Z",
-    "studyGroup": {
-      "id": 0,
-      "name": "201",
-      "studentsIds": [
-        0
-      ]
-    },
-    "subject": {
-      "id": 0,
-      "name": "Физика",
-      "studyGroup": [
-        {
-          "id": 0,
-          "name": "201",
-          "studentsIds": [
-            0
-          ]
-        }
-      ],
-      "studyMaterials": [
-        {
-          "id": 0,
-          "studyMaterialsType": "MATERIAL",
-          "materialsText": "string",
-          "subject": "string",
-          "homework": [
-            {
-              "id": 0,
-              "task": "string",
-              "studentId": 0,
-              "date": "2023-10-20T17:17:04.024Z",
-              "grade": 0,
-              "comment": "string",
-              "filesNames": [
-                "string"
-              ],
-              "fileIds": [
-                0
-              ]
-            }
-          ],
-          "filesId": [
-            0
-          ],
-          "filesNames": [
-            "string"
-          ]
-        }
-      ],
-      "schedule": [
-        "string"
-      ],
-      "creatorId": 0,
-      "editorsIds": [
-        0
-      ]
-    },
-    "classFormat": "IN_PERSON",
-    "auditorium": "string",
-    "linkForTheClass": "string",
-    "professorId": 0,
-    "professor": {
-      "id": 0,
-      "login": "string",
-      "name": "string",
-      "surname": "string",
-      "patronymic": "string",
-      "email": "string",
-      "group": "string",
-      "photo": "string",
-      "password": "string",
-      "roles": [
-        {
-          "id": 0,
-          "name": "ROLE_STUDENT"
-        }
-      ],
-      "activationStatus": "ACTIVATED"
-    }
-  }
-]
 
 const initialState: scheduleState = {
   entities: null,
@@ -273,13 +92,18 @@ export const getFullSchedule = () => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch(fetchDataStart());
-      // const response = await axios.get(`http://158.160.49.7:8080/api/study/schedule`);
-      // dispatch(fetchDataSuccess(response.data));
-      dispatch(fetchDataSuccess(mock));
+      const response = await axios.get(`http://158.160.49.7:8080/api/study/schedule`);
+      dispatch(fetchDataSuccess(response.data));
 
     } catch (error) {
       dispatch(fetchDataFailure("Что-то пошло не так"));
     }
+  }
+};
+
+export const getScheduleById = (id: number) => (state: RootState) => {
+  if (state.schedule.entities) {
+      return state.schedule.entities.find((n) => n.id === id);
   }
 };
 

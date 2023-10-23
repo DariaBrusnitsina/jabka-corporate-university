@@ -4,7 +4,7 @@ import { Dispatch } from "redux";
 import { RootState } from "./store";
 import axios from "axios";
 import localStorageService from "../services/localStorage.service";
-import { IAuth } from "./userReducer";
+import { IAuth } from "./authReducer";
 
 export interface IApplication {
   id?: number;

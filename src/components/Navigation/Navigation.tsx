@@ -16,7 +16,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import MenuIcon from '@mui/icons-material/Menu';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { getCurrentUserData, logOut } from '../../store/userReducer';
+import { getCurrentUserData, logOut } from '../../store/authReducer';
 import localStorageService from '../../services/localStorage.service';
 import { useAppDispatch } from '../../store/store';
 
@@ -112,7 +112,7 @@ function Navigation() {
               <MenuItem onClick={() => handleCloseNavMenu('news')}>
                   <Typography textAlign="center">Новости</Typography>
               </MenuItem>
-              <MenuItem onClick={() => handleCloseNavMenu('calendar')}>
+              <MenuItem onClick={() => handleCloseNavMenu('schedule')}>
                   <Typography textAlign="center">Расписание</Typography>
               </MenuItem>
               {isEnrollee &&
@@ -151,12 +151,12 @@ function Navigation() {
                 Новости
             </Button>
             <Button
-                onClick={() => handleCloseNavMenu('calendar')}
+                onClick={() => handleCloseNavMenu('schedule')}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 Расписание
             </Button>
-            {!isEnrollee && <Button
+            {isEnrollee && <Button
                 onClick={() => handleCloseNavMenu('application')}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
