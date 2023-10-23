@@ -3,35 +3,32 @@ import { Dispatch } from "redux";
 import { RootState } from "./store";
 import axios from "axios";
 
-export interface ISubject {
-  id: number
-  name: string
-  studyGroupsIds: number[]
-  creatorId: number,
-  editorsIds: number[]
-  scheduleIds: number[]
-  studyMaterialsIds: number[]
+export interface IAttendance {
+  scheduleId: number
+  status: string
+  studentId: number
 }
-interface SubjectState {
-  entities: ISubject[] | null
+
+interface AttendanceState {
+  entities: IAttendance | null
   error: string | null
   loading: boolean
 }
 
-const initialState: SubjectState = {
+const initialState: AttendanceState = {
   entities: null,
   error: null,
   loading: false
 };
-const subjectSlice = createSlice({
-  name: "subject",
+const attendanceSlice = createSlice({
+  name: "attendance",
   initialState,
   reducers: {
     fetchDataStart: (state) => {
       state.loading = true;
       state.error = null;
     },
-    fetchDataSuccess: (state, action: PayloadAction<ISubject[]>) => {
+    fetchDataSuccess: (state, action: PayloadAction<IAttendance>) => {
       state.entities = action.payload;
       state.error = null;
     },
@@ -46,14 +43,14 @@ export const {
   fetchDataStart,
   fetchDataSuccess,
   fetchDataFailure,
-} = subjectSlice.actions;
-export default subjectSlice.reducer;
+} = attendanceSlice.actions;
+export default attendanceSlice.reducer;
 
-export const fetchAllSubjects = () => {
+export const fetchAllAttendanceById = (id: number) => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch(fetchDataStart());
-      const response = await axios.get(`http://158.160.49.7:8080/api/study/subject`);
+      const response = await axios.get(`http://158.160.49.7:8080/api/study/attendance-statistics/${id}`);
       dispatch(fetchDataSuccess(response.data));
     } catch (error) {
       dispatch(fetchDataFailure("Что-то пошло не так"));
@@ -61,10 +58,5 @@ export const fetchAllSubjects = () => {
   }
 };
 
-export const getSubjectById = (id: number | undefined) => (state: RootState) => {
-  if (state.subject.entities && id !== undefined) {
-      return state.subject.entities.find((n) => n.id === id);
-  }
-};
 
-export const getAllSubjects = () => (state: RootState) => state.subject.entities;
+export const getAttendance = () => (state: RootState) => state.attendance.entities;

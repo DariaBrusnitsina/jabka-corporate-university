@@ -14,7 +14,7 @@ export interface IAuth {
   patronymic?: string;
   photo?: string;
   activationStatus?: null | string;
-  grop: string
+  group: string
   roles?: {id: number, name: string}[]
 }
 interface authState {

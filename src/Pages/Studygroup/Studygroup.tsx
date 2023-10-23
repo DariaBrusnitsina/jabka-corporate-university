@@ -1,7 +1,26 @@
-import { Button, Container, Stack, Typography } from "@mui/material";
+import { Button, Container, LinearProgress, List, ListItem, Stack, Typography } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
+import { useEffect } from "react";
+import { useAppDispatch } from "../../store/store";
+import { useNavigate } from "react-router-dom";
+import { fetchAllGroups, getAllGroups } from "../../store/groupReducer";
+import { useSelector } from "react-redux";
 
 export function Studygroup() {
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const groups = useSelector(getAllGroups())
+
+  useEffect(() => {
+    dispatch(fetchAllGroups())
+  }, []);
+
+  console.log(groups)
+
+  if (!groups) {
+    return <LinearProgress />
+  }
+
   return (
     <Container>
     <Stack direction="row" alignItems="center" justifyContent="space-between" my={5}>
@@ -11,6 +30,10 @@ export function Studygroup() {
         Добавить группу
       </Button>
     </Stack>
+
+    <List>
+      {groups.map((g) => <ListItem key={g.name}><Button onClick={() => navigate(`/studygroup/${g.id}`, {replace: true})} sx={{textTransform: 'none'}}>{g.name}</Button></ListItem>)}
+    </List>
     </Container>
 
   )

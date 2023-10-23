@@ -1,4 +1,4 @@
-import { Avatar, Box, Breadcrumbs, Button, Card, Container, LinearProgress, Link, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Breadcrumbs, Button, Card, Container, LinearProgress, Link, Stack, Typography } from "@mui/material";
 import { getFullSchedule, getScheduleById } from "../../store/scheduleReducer";
 import { useAppDispatch } from "../../store/store";
 import { useSelector } from "react-redux";
@@ -6,15 +6,8 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchAllGroups, getGroupById } from "../../store/groupReducer";
 import { fetchAllSubjects, getSubjectById } from "../../store/subjectReducer";
-import { fetchAllUsers } from "../../store/userReducer";
-
-const img = 'https://img.freepik.com/free-photo/aged-math-teacher-standing-in-classroom-with-chalk_23-2148201013.jpg?w=826&t=st=1698003403~exp=1698004003~hmac=cd7ff1c77ea8b32dc7d261562a0dc27a1f4b5714ee58c4d48b34de47651adf73%3D%3D'
-
-function formatDate(dateString: string) {
-  const options :Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  const date = new Date(dateString);
-  return date.toLocaleDateString('ru-RU', options);
-}
+import { fetchAllUsers, getUserById, getUsersByIds } from "../../store/userReducer";
+import { formatDate } from "../../utils/formatDate";
 
 export default function ScheduleItem () {
   const dispatch = useAppDispatch()
@@ -23,10 +16,10 @@ export default function ScheduleItem () {
 
   const postId = Number(location.pathname.split("/")[2])
   const scheduleById = useSelector(getScheduleById(postId))
-
-
   const gropupById = useSelector(getGroupById(scheduleById?.studyGroupId))
   const subjectById = useSelector(getSubjectById(scheduleById?.subjectId))
+  const user = useSelector(getUserById(scheduleById?.professorId))
+  const students = useSelector(getUsersByIds(gropupById?.studentsIds))
 
   useEffect(() => {
     dispatch(getFullSchedule())
@@ -35,13 +28,9 @@ export default function ScheduleItem () {
     dispatch(fetchAllUsers())
   }, []);
 
-  if (!scheduleById  || !subjectById) {
+  if (!scheduleById  || !subjectById || !gropupById || !students) {
     return <LinearProgress />
   }
-
-  console.log('scheduleById', scheduleById)
-  console.log('gropupById', gropupById)
-  console.log('subjectById', subjectById)
 
   return (
     <Container>
@@ -68,27 +57,25 @@ export default function ScheduleItem () {
 
         <Box>
           <Card sx={{display: "flex", justifyContent: 'space-between'}}>
-            <img height="250px" src={img} alt="prof" />
-            <Box m={2}>
-            <Button variant="text" sx={{textTransform: 'none', fontSize: '16px'}} onClick={() => navigate(`/subject/${subjectById.id}`, {replace: true})}>Иван Иванов</Button>
-            <Typography variant="subtitle1">Аудитория: {scheduleById.classFormat}</Typography>
-            <Typography variant="subtitle1">Аудитория: {scheduleById.classFormat}</Typography>
-            <Typography variant="subtitle1">Аудитория: {scheduleById.classFormat}</Typography>
+            <Box display="flex" flexDirection="column" alignItems="center" m={3}>
+              <Avatar/>
+              <Button variant="text" sx={{textTransform: 'none', fontSize: '16px'}} onClick={() => navigate(`/professor/${scheduleById.professorId}`, {replace: true})}>Преподаватель {user?.name}</Button>
+              <Typography variant="subtitle1">{user?.email}</Typography>
             </Box>
           </Card>
         </Box>
       </Box>
 
       <Box my={2}>
-      <Button onClick={() => navigate(`/studygroup/${subjectById.id}`, {replace: true})} variant="text" sx={{textTransform: 'none', fontSize: '24px'}}>Группа {}</Button>
+      <Button onClick={() => navigate(`/studygroup/${gropupById.id}`, {replace: true})} variant="text" sx={{textTransform: 'none', fontSize: '24px'}}>Группа {gropupById.name}</Button>
 
       <Box display='flex' py={2} columnGap={2}>
-        {<Card>
+        {students?.length !== 0 && students.map((s) => <Card>
           <Box display="flex" flexDirection="column" alignItems="center" m={3}>
             <Avatar/>
-            <Button onClick={() => navigate(`/student/${subjectById.id}`, {replace: true})} variant="text" sx={{textTransform: 'none', fontSize: '16px', marginTop: '10px'}}>Name pat Sut</Button>
+            <Button onClick={() => navigate(`/student/${s.id}`, {replace: true})} variant="text" sx={{textTransform: 'none', fontSize: '16px', marginTop: '10px'}}>{s.name}</Button>
           </Box>
-        </Card>}
+        </Card>)}
       </Box>
 
       </Box>

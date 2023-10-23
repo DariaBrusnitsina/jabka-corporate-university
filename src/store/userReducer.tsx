@@ -65,4 +65,31 @@ export const getUserById = (id: number | undefined) => (state: RootState) => {
   }
 };
 
+export const getAllProfessors = () => (state: RootState) => {
+  if (state.user.entities) {
+    let array = []
+
+    for (let i = 0; i < state.user.entities.length; i++) {
+      if (state.user.entities[i].roles?.find((r) => r.name === 'ROLE_TEACHER')) {
+        array.push(state.user.entities[i])
+      }
+    }
+    return array
+  }
+};
+
+export const getUsersByIds = (ids: number[] | undefined) => (state: RootState) => {
+  if (state.user.entities && ids) {
+    let array = []
+
+    for (let i = 0; i < ids.length; i++) {
+      const s = state.user.entities.find((n) => n.id === ids[i]);
+      if (s) {
+        array.push(s)
+      }
+    }
+    return array
+  }
+};
+
 export const getAllUsers = () => (state: RootState) => state.user.entities;

@@ -6,12 +6,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchAllGroups, getAllGroups } from "../../store/groupReducer";
 import { fetchAllSubjects, getAllSubjects } from "../../store/subjectReducer";
-
-function formatDate(dateString: string) {
-  const options :Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  const date = new Date(dateString);
-  return date.toLocaleDateString('ru-RU', options);
-}
+import { formatDate } from "../../utils/formatDate";
+import { fetchAllUsers, getAllUsers } from "../../store/userReducer";
 
 export default function Schedule () {
   const dispatch = useAppDispatch()
@@ -19,11 +15,20 @@ export default function Schedule () {
   const schedule = useSelector(fullSchedule())
   const groups = useSelector(getAllGroups())
   const subjects = useSelector(getAllSubjects())
+  const users = useSelector(getAllUsers())
 
   function findGroupById(id: number) {
     const group = groups?.find((n) => n.id === id);
     if (group) {
       return group.name
+    }
+  }
+
+  function findUserById(id: number) {
+    const user = users?.find((n) => n.id === id);
+    if (user) {
+      console.log(user)
+      return user.name
     }
   }
 
@@ -38,13 +43,13 @@ export default function Schedule () {
     dispatch(getFullSchedule())
     dispatch(fetchAllGroups())
     dispatch(fetchAllSubjects())
-  }, []);
+    dispatch(fetchAllUsers())
 
+  }, []);
 
   if (!schedule) {
     return <LinearProgress />
   }
-
 
   return (
     <Container>
@@ -70,7 +75,7 @@ export default function Schedule () {
                 <TableCell><Button onClick={() => navigate(`/schedule/${s.id}`, {replace: true})} sx={{textTransform: 'none'}}>{formatDate(s.date)}</Button></TableCell>
                 <TableCell><Button onClick={() => navigate(`/subject/${s.subjectId}`, {replace: true})} sx={{textTransform: 'none'}}>{findSubjectsById(s.subjectId)}</Button></TableCell>
                 <TableCell><Button onClick={() => navigate(`/studygroup/${s.studyGroupId}`, {replace: true})} sx={{textTransform: 'none'}}>{findGroupById(s.studyGroupId)}</Button></TableCell>
-                {/* <TableCell>{s.professor.name}</TableCell> */}
+                <TableCell><Button onClick={() => navigate(`/professor/${s.professorId}`, {replace: true})} sx={{textTransform: 'none'}}>{findUserById(s.professorId)}</Button></TableCell>
                 <TableCell>{s.auditorium}</TableCell>
               </TableRow>
             ))}

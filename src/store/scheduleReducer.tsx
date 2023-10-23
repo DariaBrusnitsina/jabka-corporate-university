@@ -101,9 +101,23 @@ export const getFullSchedule = () => {
   }
 };
 
-export const getScheduleById = (id: number) => (state: RootState) => {
-  if (state.schedule.entities) {
+export const getScheduleById = (id: number | undefined) => (state: RootState) => {
+  if (state.schedule.entities && id) {
       return state.schedule.entities.find((n) => n.id === id);
+  }
+};
+
+export const getSchedulesByIds = (ids: number[] | undefined) => (state: RootState) => {
+  if (state.schedule.entities && ids) {
+    let array = []
+
+    for (let i = 0; i < ids.length; i++) {
+      const s = state.schedule.entities.find((n) => n.id === ids[i]);
+      if (s) {
+        array.push(s)
+      }
+    }
+    return array
   }
 };
 

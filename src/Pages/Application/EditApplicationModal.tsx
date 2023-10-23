@@ -147,7 +147,7 @@ export default function EditApplicationModal({open, application, user, handleClo
   return (
     <Dialog open={open} onClose={handleAppClose} fullWidth maxWidth="md">
       <DialogContent sx={{height: '90vh'}} >
-        <DialogTitle>Создать заявление</DialogTitle>
+        <DialogTitle>Редактировать заявление</DialogTitle>
         <Box
         component="form"
         onSubmit={handleSubmit}

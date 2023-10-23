@@ -156,7 +156,7 @@ function Navigation() {
               >
                 Расписание
             </Button>
-            {isEnrollee && <Button
+            {!isEnrollee && <Button
                 onClick={() => handleCloseNavMenu('application')}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >

@@ -9,6 +9,7 @@ import CreateApplicationModal from "./CreateApplicationModal";
 import { getCurrentUserData } from "../../store/authReducer";
 import EditApplicationModal from "./EditApplicationModal";
 import { toast } from "react-toastify";
+import { getApplicationById } from "../../store/applicationsReducer";
 
 const statuses = [
   {name: 'ON_MODERATION', label: 'На модерации'},
@@ -28,9 +29,12 @@ export default function Application() {
 
   const userId = localStorageService.getUserId()
   const dispatch = useAppDispatch()
-  const application = useSelector(getUserApplication())
   const currentUser = useSelector(getCurrentUserData());
   const reqError = useSelector(getApplicationError())
+
+  const application = useSelector(getApplicationById(Number(userId)))
+
+  console.log(application)
 
   useEffect(() => {
     if (reqError) {
@@ -41,9 +45,9 @@ export default function Application() {
     }
   }, [reqError]);
 
-  useEffect(() => {
-    dispatch(getUserApplicationById(Number(userId)))
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getUserApplicationById(Number(userId)))
+  // }, []);
 
   function handleFindColor(a: IApplication) {
     if (a.requestStatus === 'ON_MODERATION') {
@@ -57,7 +61,7 @@ export default function Application() {
     }
   }
 
-  if (!application) {
+  if (!currentUser) {
     return <LinearProgress />
   }
 

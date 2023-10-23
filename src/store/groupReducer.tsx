@@ -70,4 +70,18 @@ export const getGroupById = (id: number | undefined) => (state: RootState) => {
   }
 };
 
+export const getStudyGroupsByIds = (ids: number[] | undefined) => (state: RootState) => {
+  if (state.group.entities && ids) {
+    let array = []
+
+    for (let i = 0; i < ids.length; i++) {
+      const s = state.group.entities.find((n) => n.id === ids[i]);
+      if (s) {
+        array.push(s)
+      }
+    }
+    return array
+  }
+};
+
 export const getAllGroups = () => (state: RootState) => state.group.entities;

@@ -21,6 +21,8 @@ import { SubjectItem } from './Pages/SubjectItem/SubjectItem'
 import { StudentItem } from './Pages/StudentItem/StudentItem'
 import { Student } from './Pages/Student/Student'
 import { Studygroup } from './Pages/Studygroup/Studygroup'
+import { Professor } from './Pages/Professor/Professor'
+import { ProfessorItem } from './Pages/ProfessorItem/ProfessorItem'
 
 export default function App() {
   const dispatch = useAppDispatch()
@@ -52,6 +54,11 @@ export default function App() {
       <Route path="studygroup">
         <Route index element={<Studygroup />}/>
         <Route path=":itemId" element={<StudygroupItem />}/>
+      </Route>
+
+      <Route path="professor">
+        <Route index element={<Professor />}/>
+        <Route path=":itemId" element={<ProfessorItem />}/>
       </Route>
 
       <Route path="subject">
