@@ -4,17 +4,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { fetchAllUsers, getUserById } from "../../store/userReducer";
 import { useEffect } from "react";
-import { IAttendance, fetchAllAttendanceById, getAttendance } from "../../store/attendanceReducer";
+import { fetchAllAttendanceById, getAttendance } from "../../store/attendanceReducer";
 import { getFullSchedule, getScheduleById } from "../../store/scheduleReducer";
 import { formatDate } from "../../utils/formatDate";
-
-function handleFindColor(a: IAttendance) {
-  if (a.status === 'ATTENDED') {
-    return 'succes';
-  } else if (a.status === 'DENIED') {
-    return 'error'
-  }
-}
 
 export function StudentItem() {
   const dispatch = useAppDispatch()
@@ -66,7 +58,6 @@ export function StudentItem() {
             </TableBody>
           </Table>
         </TableContainer>
-
     </Container>
   )
 }

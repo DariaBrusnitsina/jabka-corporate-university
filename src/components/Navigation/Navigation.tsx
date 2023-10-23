@@ -150,19 +150,19 @@ function Navigation() {
               >
                 Новости
             </Button>
-            <Button
+            {userId && <Button
                 onClick={() => handleCloseNavMenu('schedule')}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 Расписание
-            </Button>
-            {!isEnrollee && <Button
+            </Button>}
+            {isEnrollee && <Button
                 onClick={() => handleCloseNavMenu('application')}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 Мои заявления
             </Button>}
-            {!isCommittee && <Button
+            {isCommittee && <Button
                 onClick={() => handleCloseNavMenu('applications')}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >

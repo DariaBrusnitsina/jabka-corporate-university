@@ -70,7 +70,6 @@ export default function EditNewsModal({open, post, handleClose, isEdit}: Props) 
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formValues)
     setFormErrors(validate(formValues));
     setIsSubmitting(true);
   };

@@ -5,7 +5,8 @@ import NewsCard from "./NewsCard"
 import AddIcon from '@mui/icons-material/Add';
 import { ChangeEvent, useState } from "react";
 import SearchIcon from '@mui/icons-material/Search';
-import EditNewsModal from '../NewsPost/EditNewsModal';
+import EditNewsModal from './EditNewsModal';
+import { getCurrentUserData } from "../../store/authReducer";
 
 const allHashtags = ['Всe новости', 'Поступающим', 'Образование', 'Наука', 'Экспертиза', 'Общество', 'Университетская жизнь']
 const options=[
@@ -23,6 +24,8 @@ function News() {
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const newsPerPage = 5;
+  const currentUser = useSelector(getCurrentUserData());
+  const isAdmin = currentUser?.roles?.find((r) => r.name === 'ROLE_ADMIN') !== undefined
 
   //modal
   const [open, setOpen] = useState(false);
@@ -60,9 +63,9 @@ function News() {
       <Stack direction="row" alignItems="center" justifyContent="space-between" my={5}>
         <Typography variant="h4">Новости нашего университета</Typography>
 
-        <Button variant="contained" color="secondary" startIcon={<AddIcon />} onClick={handleOpen}>
+        {isAdmin && <Button variant="contained" color="secondary" startIcon={<AddIcon />} onClick={handleOpen}>
           Добавить новость
-        </Button>
+        </Button>}
       </Stack>
 
     <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">

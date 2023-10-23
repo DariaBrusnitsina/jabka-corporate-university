@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-// import axios from "axios";
 import { Dispatch } from "redux";
 import { RootState } from "./store";
 import axios from "axios";
@@ -98,7 +97,6 @@ export const updateApplication = (data: IApplication) => {
       dispatch(fetchDataSuccess(response.data));
 
     } catch (error) {
-      console.log(error);
       dispatch(fetchDataFailure("Что-то пошло не так"));
     }
   }

@@ -35,7 +35,6 @@ function AuthLogin() {
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log()
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };

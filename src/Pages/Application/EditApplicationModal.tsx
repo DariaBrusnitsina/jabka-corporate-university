@@ -137,12 +137,10 @@ export default function EditApplicationModal({open, application, user, handleClo
 
   function handleDelete() {
     if (formValues.id) {
-      console.log(formValues.id)
       dispatch(deleteApplicationById(formValues.id))
       handleClose()
     }
   }
-
 
   return (
     <Dialog open={open} onClose={handleAppClose} fullWidth maxWidth="md">

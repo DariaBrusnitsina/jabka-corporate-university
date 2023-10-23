@@ -9,6 +9,7 @@ import groupReducer from './groupReducer';
 import subjectReducer from './subjectReducer';
 import userReducer from './userReducer';
 import attendanceReducer from './attendanceReducer';
+import materialReducer from './materialReducer';
 
 export const store = configureStore({
   reducer: {
@@ -20,7 +21,8 @@ export const store = configureStore({
     group: groupReducer,
     subject: subjectReducer,
     user: userReducer,
-    attendance: attendanceReducer
+    attendance: attendanceReducer,
+    material: materialReducer
   },
 });
 

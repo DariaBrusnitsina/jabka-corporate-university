@@ -2,12 +2,15 @@ import { Button, Container, LinearProgress, Stack, Table, TableBody, TableCell, 
 import { fullSchedule, getFullSchedule } from "../../store/scheduleReducer";
 import { useAppDispatch } from "../../store/store";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchAllGroups, getAllGroups } from "../../store/groupReducer";
 import { fetchAllSubjects, getAllSubjects } from "../../store/subjectReducer";
 import { formatDate } from "../../utils/formatDate";
 import { fetchAllUsers, getAllUsers } from "../../store/userReducer";
+import { getCurrentUserData } from "../../store/authReducer";
+import AddIcon from '@mui/icons-material/Add';
+import CreateScheduleModal from "./CreateScheduleModal";
 
 export default function Schedule () {
   const dispatch = useAppDispatch()
@@ -16,6 +19,9 @@ export default function Schedule () {
   const groups = useSelector(getAllGroups())
   const subjects = useSelector(getAllSubjects())
   const users = useSelector(getAllUsers())
+  const currentUser = useSelector(getCurrentUserData());
+  const isAdmin = currentUser?.roles?.find((r) => r.name === 'ROLE_ADMIN') !== undefined
+
 
   function findGroupById(id: number) {
     const group = groups?.find((n) => n.id === id);
@@ -27,7 +33,6 @@ export default function Schedule () {
   function findUserById(id: number) {
     const user = users?.find((n) => n.id === id);
     if (user) {
-      console.log(user)
       return user.name
     }
   }
@@ -38,6 +43,11 @@ export default function Schedule () {
       return subject.name
     }
   }
+
+  //modal
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     dispatch(getFullSchedule())
@@ -55,10 +65,13 @@ export default function Schedule () {
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" my={5}>
         <Typography variant="h4">Расписание</Typography>
+
+        {!isAdmin && <Button variant="contained" color="secondary" startIcon={<AddIcon />} onClick={handleOpen}>
+          Добавить расписание
+        </Button>}
       </Stack>
 
-
-    <TableContainer>
+      <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
@@ -83,7 +96,8 @@ export default function Schedule () {
         </Table>
       </TableContainer>
 
-      </Container>
+      <CreateScheduleModal open={open} handleClose={handleClose}/>
+    </Container>
   );
 };
 

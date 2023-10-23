@@ -15,8 +15,6 @@ export function Studygroup() {
     dispatch(fetchAllGroups())
   }, []);
 
-  console.log(groups)
-
   if (!groups) {
     return <LinearProgress />
   }

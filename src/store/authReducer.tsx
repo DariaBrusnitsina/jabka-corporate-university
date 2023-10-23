@@ -73,7 +73,6 @@ export const login = (
 
       dispatch(fetchDataSuccess(response.data.user));
       localStorageService.setTokens({ idToken: response.data.accessToken, localId:response.data.user.id});
-      console.log(response.data)
 
     } catch (error) {
       dispatch(fetchDataFailure("Неверный логин или пароль"));

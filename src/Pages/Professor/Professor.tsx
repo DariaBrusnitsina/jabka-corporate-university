@@ -11,7 +11,6 @@ export function Professor() {
   const navigate = useNavigate()
   const professors = useSelector(getAllProfessors())
 
-console.log(professors)
   useEffect(() => {
     dispatch(fetchAllUsers())
   }, []);
