@@ -1,27 +1,11 @@
-# React + TypeScript + Vite
+### 3-е место на хакатоне Лига Приключений Санкт-Петербург
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Описание
+1 кейс. Разработка вебсайта для Корпоративного университета Совкомбанка: Этот вебсайт был создан с целью обеспечения автоматизации различных процессов, связанных с деятельностью корпоративного университета, начиная с приема заявок от желающих обучаться и заканчивая формированием и учетом кадрового резерва выпускников с учетом требований, характерных для образовательных организаций.
 
-Currently, two official plugins are available:
+## Функциональность
+На вебсайте реализована возможность подачи заявок абитуриентами (кандидатами в студенты), их регистрация, а также взаимодействие студентов, преподавателей и кураторов групп. Все это обеспечивает эффективную организацию учебного процесса.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Форма обучения на вебсайте включает в себя как очные лекции от топовых экспертов, так и дистанционное обучение. Студентам доступны различные учебные материалы, такие как видео-записи лекций, конспекты лекций, презентации, а также другие видео-материалы, обеспечивая полноценное и разнообразное образовательное воздействие.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Этот вебсайт стал важным инструментом для развития корпоративного обучения сотрудников и позволяет группе компаний Совкомбанка эффективно управлять своим университетом, предоставляя обучение как для сотрудников, так и для будущих кандидатов, стремящихся начать свою карьеру в Совкомбанке.
